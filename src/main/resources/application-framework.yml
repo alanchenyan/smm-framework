@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://112.74.200.88:3306/retail_db?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone = GMT
+    username: wz
+    password: WzJh6612520
+
+swagger:
+  enable: true
