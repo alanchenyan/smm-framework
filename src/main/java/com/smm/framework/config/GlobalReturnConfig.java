@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
 /**
  * @author Alan Chen
- * @description
+ * @description Controller返回参数全局包装成ResponseResult对象
  * @date 2019-10-11
  */
 @EnableWebMvc
