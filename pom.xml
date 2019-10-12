@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.smm</groupId>
     <artifactId>smm-framework</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <name>smm-framework</name>
     <description>smm-framework</description>
 
@@ -108,5 +108,15 @@
             </plugin>
         </plugins>
     </build>
+
+
+<!--    <build>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>

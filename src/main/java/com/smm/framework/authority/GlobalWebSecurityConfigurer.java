@@ -1,5 +1,7 @@
 package com.smm.framework.authority;
 
+import com.smm.framework.authority.exception.GlobalAccessDeniedHandler;
+import com.smm.framework.authority.exception.GlobalAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
@@ -23,9 +25,9 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthenticationEntryPoint globalAuthenticationEntryPoint;
+    GlobalAuthenticationEntryPoint globalAuthenticationEntryPoint;
     @Autowired
-    private AccessDeniedHandler globalAccessDeniedHandler;
+    GlobalAccessDeniedHandler globalAccessDeniedHandler;
 
     private final String CLOSE_AUTH_ENVIRONMENT = "dev";
 
