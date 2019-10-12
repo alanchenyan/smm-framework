@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * 全局异常处理
- * @author -Huang
- * @create 2019-09-05 8:58
+ * @author Alan Chen
+ * @description 全局异常处理
+ * @date 2019/5/15
  */
 @ControllerAdvice
 @Component
