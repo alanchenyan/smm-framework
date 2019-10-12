@@ -73,27 +73,45 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         //本地开发环境关闭权限控制，方便测试
         if(closeAuthEnvironment().equals(currentEnvironment())){
             closeAuthConfigure(http);
         }else{
             customConfigure(http);
+            commonConfigure(http);
         }
         // 禁用 SESSION、JSESSIONID
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-    protected void customConfigure(HttpSecurity http) throws Exception{
+
+    /**
+     * 用户自定义配置，子类可覆盖自定义实现
+     * @param http
+     * @throws Exception
+     */
+    protected HttpSecurity customConfigure(HttpSecurity http) throws Exception{
         http.cors().and().csrf().disable().authorizeRequests()
                 .anyRequest().authenticated()
-                .and()
-                .addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
+                .and();
+        return http;
+    }
+
+
+    private void commonConfigure(HttpSecurity http) throws Exception{
+        http.addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
                 .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
 
         http.exceptionHandling().authenticationEntryPoint(globalAuthenticationEntryPoint).accessDeniedHandler(globalAccessDeniedHandler);
     }
 
 
+    /**
+     * 关闭接口权限校验配置
+     * @param http
+     * @throws Exception
+     */
     private void closeAuthConfigure(HttpSecurity http) throws Exception{
         http.cors().and().csrf().disable().authorizeRequests()
                 .antMatchers("/**").permitAll()
