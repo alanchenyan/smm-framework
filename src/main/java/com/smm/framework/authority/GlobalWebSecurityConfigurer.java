@@ -1,7 +1,6 @@
 package com.smm.framework.authority;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,9 +23,9 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private AuthenticationEntryPoint authenticationEntryPointImpl;
+    private AuthenticationEntryPoint globalAuthenticationEntryPoint;
     @Autowired
-    private AccessDeniedHandler accessDeniedHandlerImpl;
+    private AccessDeniedHandler globalAccessDeniedHandler;
 
     private final String CLOSE_AUTH_ENVIRONMENT = "dev";
 
@@ -76,25 +75,32 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
     protected void configure(HttpSecurity http) throws Exception {
         //本地开发环境关闭权限控制，方便测试
         if(closeAuthEnvironment().equals(currentEnvironment())){
-            http.cors().and().csrf().disable().authorizeRequests()
-                    .antMatchers("/**").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                    .addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
-                    .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
+            closeAuthConfigure(http);
         }else{
-            http.cors().and().csrf().disable().authorizeRequests()
-                    .antMatchers("/user-login/verify-account").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                    .addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
-                    .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
-
-            http.exceptionHandling().authenticationEntryPoint(authenticationEntryPointImpl).accessDeniedHandler(accessDeniedHandlerImpl);
+            customConfigure(http);
         }
-
         // 禁用 SESSION、JSESSIONID
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    }
+
+    protected void customConfigure(HttpSecurity http) throws Exception{
+        http.cors().and().csrf().disable().authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
+                .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
+
+        http.exceptionHandling().authenticationEntryPoint(globalAuthenticationEntryPoint).accessDeniedHandler(globalAccessDeniedHandler);
+    }
+
+
+    private void closeAuthConfigure(HttpSecurity http) throws Exception{
+        http.cors().and().csrf().disable().authorizeRequests()
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated()
+                .and()
+                .addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
+                .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
     }
 
 }
