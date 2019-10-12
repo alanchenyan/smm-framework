@@ -27,12 +27,13 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
 
     AccessDeniedHandler globalAccessDeniedHandler = new GlobalAccessDeniedHandler();
 
-    private final String CLOSE_AUTH_ENVIRONMENT = "dev";
 
-    public abstract String currentEnvironment();
-
-    public String closeAuthEnvironment(){
-        return CLOSE_AUTH_ENVIRONMENT;
+    /**
+     * 如果要让某种运行环境下关闭权限校验，请重写该方法
+     * @return
+     */
+    protected CloseAuthorityEvironment customCloseAuthorityEvironment(){
+        return null;
     }
 
     /**
@@ -74,15 +75,21 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        //本地开发环境关闭权限控制，方便测试
-        if(closeAuthEnvironment().equals(currentEnvironment())){
+        boolean isCloseAuth;
+
+        CloseAuthorityEvironment closeAuthority = customCloseAuthorityEvironment();
+        if(closeAuthority ==null || closeAuthority.getCloseAuthEnvironment() == null || closeAuthority.getCurrentRunEnvironment()==null){
+            isCloseAuth = false;
+        }else{
+            isCloseAuth = closeAuthority.getCloseAuthEnvironment().equals(closeAuthority.getCurrentRunEnvironment());
+        }
+
+        if(isCloseAuth){
             closeAuthConfigure(http);
         }else{
             customConfigure(http);
             commonConfigure(http);
         }
-        // 禁用 SESSION、JSESSIONID
-        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
 
@@ -104,6 +111,8 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
                 .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
 
         http.exceptionHandling().authenticationEntryPoint(globalAuthenticationEntryPoint).accessDeniedHandler(globalAccessDeniedHandler);
+        // 禁用 SESSION、JSESSIONID
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
 
