@@ -22,11 +22,11 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 @Order(SecurityProperties.BASIC_AUTH_ORDER)
 public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-     AuthenticationEntryPoint globalAuthenticationEntryPoint;
+    @Autowired(required=true)
+    AuthenticationEntryPoint globalAuthenticationEntryPoint;
 
-    @Autowired
-     AccessDeniedHandler globalAccessDeniedHandler;
+    @Autowired(required=true)
+    AccessDeniedHandler globalAccessDeniedHandler;
 
     private final String CLOSE_AUTH_ENVIRONMENT = "dev";
 
