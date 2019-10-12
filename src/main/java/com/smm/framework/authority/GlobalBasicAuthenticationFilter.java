@@ -45,7 +45,7 @@ public class GlobalBasicAuthenticationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(String token) {
         String user = Jwts.parser()
-                .setSigningKey(signingKey) //私钥
+                .setSigningKey(signingKey)
                 .parseClaimsJws(token.replace(JwtUtil.getAuthorizationHeaderPrefix(), ""))
                 .getBody()
                 .getSubject();

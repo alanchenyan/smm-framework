@@ -25,11 +25,13 @@ public abstract class GloablSwaggerConfig implements WebMvcConfigurer {
 
     /**
      * Swagger文档标题
+     * @return
      */
     public abstract String swaggerTile();
 
     /**
      * 是否开启Swagger
+     * @return
      */
     public abstract boolean swaggerEnable();
 

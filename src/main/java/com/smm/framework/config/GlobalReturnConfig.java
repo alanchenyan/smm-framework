@@ -21,7 +21,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @Configuration
 public class GlobalReturnConfig {
 
-    @RestControllerAdvice
+    /**
+     *  basePackages : 只拦截controller包下的类；否则swagger也会拦截影响swagger正常使用
+     */
+    @RestControllerAdvice(basePackages = "*.controller")
     static class ResultResponseAdvice implements ResponseBodyAdvice<Object> {
         @Override
         public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {

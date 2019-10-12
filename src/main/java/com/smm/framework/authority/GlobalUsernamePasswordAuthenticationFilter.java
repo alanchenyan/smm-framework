@@ -59,7 +59,7 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
         String token = Jwts.builder()
                 .setSubject(((User) authResult.getPrincipal()).getUsername())
                 .setExpiration(expirationDate)
-                .signWith(SignatureAlgorithm.HS512, signingKey) //私钥
+                .signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();
 
         returnToken(response, JwtUtil.getTokenHeader(token));
@@ -67,16 +67,16 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
 
     private void returnToken(HttpServletResponse response, String token) {
 
-        Map<String,Object> tokenMap = new HashMap();
+        Map<String,Object> tokenMap = new HashMap(2);
         tokenMap.put("token",token);
-        JSONObject responseJSONObject = new JSONObject(tokenMap);
+        JSONObject responseJsonObject = new JSONObject(tokenMap);
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.append(responseJSONObject.toString());
+            out.append(responseJsonObject.toString());
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();

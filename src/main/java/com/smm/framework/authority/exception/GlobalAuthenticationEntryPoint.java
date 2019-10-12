@@ -26,19 +26,19 @@ public class GlobalAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     private void responseException(HttpServletResponse response) {
 
-        Map<String,Object> exceptionMap = new HashMap();
+        Map<String,Object> exceptionMap = new HashMap(2);
 
         exceptionMap.put("code",403);
         exceptionMap.put("msg","授权认证失败");
 
-        JSONObject responseJSONObject = new JSONObject(exceptionMap);
+        JSONObject responseJsonObject = new JSONObject(exceptionMap);
 
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.append(responseJSONObject.toString());
+            out.append(responseJsonObject.toString());
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();

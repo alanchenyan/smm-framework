@@ -26,18 +26,18 @@ public class GlobalAccessDeniedHandler implements AccessDeniedHandler {
 
     private void responseException(HttpServletResponse response) {
 
-        Map<String,Object> exceptionMap = new HashMap();
+        Map<String,Object> exceptionMap = new HashMap(2);
 
         exceptionMap.put("code",403);
         exceptionMap.put("msg","认证用户访问无权限资源时的异常");
 
-        JSONObject responseJSONObject = new JSONObject(exceptionMap);
+        JSONObject responseJsonObject = new JSONObject(exceptionMap);
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json; charset=utf-8");
         PrintWriter out = null;
         try {
             out = response.getWriter();
-            out.append(responseJSONObject.toString());
+            out.append(responseJsonObject.toString());
             out.flush();
         } catch (IOException e) {
             e.printStackTrace();
