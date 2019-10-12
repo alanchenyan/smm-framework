@@ -21,8 +21,11 @@ import java.util.ArrayList;
  */
 public class GlobalBasicAuthenticationFilter extends BasicAuthenticationFilter {
 
-    public GlobalBasicAuthenticationFilter(AuthenticationManager authenticationManager) {
+    private String signingKey;
+
+    public GlobalBasicAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey) {
         super(authenticationManager);
+        this.signingKey = signingKey;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class GlobalBasicAuthenticationFilter extends BasicAuthenticationFilter {
 
     private UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationToken(String token) {
         String user = Jwts.parser()
-                .setSigningKey("PrivateSecret") //私钥
+                .setSigningKey(signingKey) //私钥
                 .parseClaimsJws(token.replace(JwtUtil.getAuthorizationHeaderPrefix(), ""))
                 .getBody()
                 .getSubject();

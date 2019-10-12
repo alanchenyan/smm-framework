@@ -28,9 +28,13 @@ import java.util.Map;
 public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
+    private String signingKey;
+    private Date expirationDate;
 
-    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager) {
+    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,Date expirationDate) {
         this.authenticationManager = authenticationManager;
+        this.signingKey = signingKey;
+        this.expirationDate = expirationDate;
     }
 
     @Override
@@ -54,8 +58,8 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
                                             FilterChain chain, Authentication authResult) {
         String token = Jwts.builder()
                 .setSubject(((User) authResult.getPrincipal()).getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                .signWith(SignatureAlgorithm.HS512, "PrivateSecret") //私钥
+                .setExpiration(expirationDate)
+                .signWith(SignatureAlgorithm.HS512, signingKey) //私钥
                 .compact();
 
         returnToken(response, JwtUtil.getTokenHeader(token));

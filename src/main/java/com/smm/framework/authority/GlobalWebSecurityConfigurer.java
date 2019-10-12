@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+import java.util.Date;
+
 /**
  * @author Alan Chen
  * @description
@@ -27,6 +29,14 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
 
     AccessDeniedHandler globalAccessDeniedHandler = new GlobalAccessDeniedHandler();
 
+
+    protected String signingKey(){
+        return "PrivateSecret";
+    }
+
+    protected Date expirationDate(){
+        return new Date(System.currentTimeMillis() + 30 * 60 * 1000);
+    }
 
     /**
      * 如果要让某种运行环境下关闭权限校验，请重写该方法
@@ -107,8 +117,12 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
 
 
     private void commonConfigure(HttpSecurity http) throws Exception{
-        http.addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
-                .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
+
+        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationDate());
+        GlobalBasicAuthenticationFilter basicAuthenticationFilter = new GlobalBasicAuthenticationFilter(authenticationManager(),signingKey());
+
+        http.addFilter(usernamePasswordAuthenticationFilter)
+                .addFilter(basicAuthenticationFilter);
 
         http.exceptionHandling().authenticationEntryPoint(globalAuthenticationEntryPoint).accessDeniedHandler(globalAccessDeniedHandler);
         // 禁用 SESSION、JSESSIONID
@@ -123,11 +137,7 @@ public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerA
      */
     private void closeAuthConfigure(HttpSecurity http) throws Exception{
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilter(new GlobalUsernamePasswordAuthenticationFilter(authenticationManager()))
-                .addFilter(new GlobalBasicAuthenticationFilter(authenticationManager()));
+                .antMatchers("/**").permitAll();
     }
 
 }
