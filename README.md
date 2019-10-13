@@ -206,7 +206,23 @@ public void createAgents(@RequestBody @Valid AddUserAgentVO addUserAgentVO){
     userAgentServiceImpl.saveAgents(addUserAgentVO);
 }
 ```
-
+代码
+```
+@ApiOperation("获取代理列表")
+@GetMapping("/list")
+public ResponseResult pageUserAgents(UserAgentSearch search) {
+    IPage<UserAgentVO> page = userAgentServiceImpl.pageUserAgents(search);
+    return ResponseResult.success(page);
+}
+```
+可以改成
+```
+@ApiOperation("获取代理列表")
+@GetMapping("/list")
+public IPage<UserAgentVO> pageUserAgents(UserAgentSearch search) {
+    return userAgentServiceImpl.pageUserAgents(search);
+}
+```
 
 
 
