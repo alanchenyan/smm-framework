@@ -165,5 +165,53 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
 如果你需要指定某些接口要放行，你可以重写customConfigure(HttpSecurity http)，通过HttpSecurity设置放行接口，然后返回设置后的HttpSecurity
 
 
+##### 2.6 Restful API 返回统一的数据格式到前端
 
+###### 2.6.1 smm框架中，统一返回到前端的格式是ResponseResult
+```
+public class ResponseResult {
+    private int code;
+    private String msg;
+    private Object data;
+}
+```
+
+###### 2.6.2 server端的异常也会被全局拦截，统一返回ResponseResult格式
+参见2.2
+
+###### 2.6.3 全局拦截Controller层API，对所有返回值统一包装成ResponseResult格式再返回到前端
+继承GlobalReturnConfig
+```
+@EnableWebMvc
+@Configuration
+public class ControllerReturnConfig extends GlobalReturnConfig {
+
+}
+```
+
+所以Controller层API不需要显示地返回ResponseResult，因为会全局处理并返回ResponseResult格式，如一下代码
+```
+ @ApiOperation("新增代理")
+  @PostMapping
+  public ResponseResult createAgents(@RequestBody @Valid AddUserAgentVO addUserAgentVO){
+      userAgentServiceImpl.saveAgents(addUserAgentVO);
+      return ResponseResult.success();
+  }
+```
+可以改成
+```
+@ApiOperation("新增代理")
+@PostMapping
+public void createAgents(@RequestBody @Valid AddUserAgentVO addUserAgentVO){
+    userAgentServiceImpl.saveAgents(addUserAgentVO);
+}
+```
+
+
+
+
+
+
+
+ 
 
