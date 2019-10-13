@@ -6,25 +6,7 @@ smm-framework（以后简称smm框架） 是由SpringBoot + Mybatis Plus + Mysql
 ##### 1.2 搜索框中输入alanchenyan/smm-framework
 ##### 1.3 可以在当前页面中查看到smm框架所有历史版本以及导入方式
 
-**gradle导入方式**
-
-Step 1. Add the JitPack repository to your build file
-```
-allprojects {
-  repositories {
-    ...
-    maven { url 'https://jitpack.io' }
-  }
-}
-```
-Step 2. Add the dependency
-```
-dependencies {
-   implementation 'com.github.alanchenyan:smm-framework:1.1.5'
-}
-```
-
-**maven导入方式**
+**以maven导入方式为例**
 
 Step 1. Add the JitPack repository to your build file
 ```
@@ -35,6 +17,7 @@ Step 1. Add the JitPack repository to your build file
   </repository>
 </repositories>
 ```
+
 Step 2. Add the dependency
 ```
 <dependency>
@@ -44,9 +27,18 @@ Step 2. Add the dependency
 </dependency>
 ```
 
-#### 二、功能使用说明
+Step 3. Set parent
+```
+<parent>
+    <groupId>com.github.alanchenyan</groupId>
+    <artifactId>smm-framework</artifactId>
+    <version>1.1.7</version>
+    <relativePath/> 
+</parent>
+```
+需要重点说明的是，如果你的项目中将parent配置成了smm框架（即Step 3），那么smm框架中
 
-以下相关功能的集成以maven为例
+#### 二、功能使用说明
 
 ##### 2.1 跨域请求配置
 继承GlobalCorsConfig
