@@ -11,7 +11,7 @@
 
     <groupId>com.smm</groupId>
     <artifactId>smm-framework</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.7</version>
     <name>smm-framework</name>
     <description>smm-framework</description>
 
@@ -98,6 +98,12 @@
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
             <version>1.2.62</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.9</version>
         </dependency>
 
 
