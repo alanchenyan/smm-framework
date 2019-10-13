@@ -133,6 +133,8 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
 
 }
 ```
+
+###### 2.5.3 指定某种环境下关闭接口权限校验
 为了方便开发，一般我们在本地开发环境中会关闭接口权限校验，因为我们提供了一个customCloseAuthorityEvironment()方法，你可以指定某种环境下关闭接口权限校验，如下：
 ```
 @Configuration
@@ -152,5 +154,16 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
     }
 }
 ```
+
+###### 2.5.4 JWT Token signingKey
+重写String signingKey()方法，返回你的私钥
+
+###### 2.5.5 设置Token过期时间
+重写Date expirationDate()方法
+
+###### 2.5.6 自定义放行接口
+如果你需要指定某些接口要放行，你可以重写customConfigure(HttpSecurity http)，通过HttpSecurity设置放行接口，然后返回设置后的HttpSecurity
+
+
 
 
