@@ -36,7 +36,7 @@ Step 3. Set parent
     <relativePath/> 
 </parent>
 ```
-需要重点说明的是，如果你的项目中将parent配置成了smm框架（即Step 3），那么smm框架中
+需要重点说明的是，如果你的项目中将parent配置成了smm框架（即Step 3），那么smm框架中已经配置导入的依赖，你的项目中不需要再重新配置依赖，如spring boot、mysql-connector-java、mybatis plus、swagger2、hibernate-validator等等。
 
 #### 二、功能使用说明
 
@@ -61,17 +61,8 @@ public class ExceptionHandler extends GlobalExceptionHandler {
 }
 ```
 
-##### 2.3 mybatis plus集成与配置
-
-###### 2.3.1 导入mybatis plus依赖
-```
-<dependency>
-    <groupId>com.baomidou</groupId>
-    <artifactId>mybatis-plus-boot-starter</artifactId>
-    <version>3.0.3</version>
-</dependency>
-```
-###### 2.3.2 继承GlobalMybatisConfig
+##### 2.3 mybatis plus配置
+继承GlobalMybatisConfig
 ```
 @Configuration
 public class MybatisPlusConfig extends GlobalMybatisConfig {
@@ -79,7 +70,87 @@ public class MybatisPlusConfig extends GlobalMybatisConfig {
 }
 ```
 
-##### 2.4 swagger集成与配置
+##### 2.4 Swagger文档配置
+继承GloablSwaggerConfig
+```
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig extends GloablSwaggerConfig {
 
-###### 2.4.1 导入swagger依赖
+}
+```
+
+另外，Swagger通常只在本地开发环境或内网测试环境开启，生产环境中Swagger一般都是需要关闭的。因此我们提供了一个抽象方法boolean swaggerEnable()需要你来指定Swagger是否开启，通常这个开关配置在配置文件中，开发环境设置为true,生产设置成true，如下：
+
+```
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig extends GloablSwaggerConfig {
+    @Value("${swagger.enable}")
+    private boolean enable;
+
+    @Override
+    public String swaggerTile() {
+        return "网值Boss API列表";
+    }
+
+    @Override
+    public boolean swaggerEnable() {
+        return enable;
+    }
+}
+```
+
+##### 2.5 接口权限控制JWT Token配置
+
+###### 2.5.1 实现接口UserDetailsService,重写loadUserByUsername()方法，查询数据库返回UserDetails
+
+密码加密方式默认用的是BCryptPasswordEncoder
+```
+@Service
+public class UserDetailServiceImpl implements UserDetailsService {
+
+    @Autowired
+    IUserAdminService userAdminServiceImpl;
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        String password = userAdminServiceImpl.getUserPassword(userName);
+        return new User(userName, password, getAuthority());
+    }
+
+    private List getAuthority() {
+        return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+    }
+}
+```
+
+###### 2.5.2 继承GlobalWebSecurityConfigurer
+```
+@Configuration
+@Order(SecurityProperties.BASIC_AUTH_ORDER)
+public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
+
+}
+```
+为了方便开发，一般我们在本地开发环境中会关闭接口权限校验，因为我们提供了一个customCloseAuthorityEvironment()方法，你可以指定某种环境下关闭接口权限校验，如下：
+```
+@Configuration
+@Order(SecurityProperties.BASIC_AUTH_ORDER)
+public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
+
+    @Value("${spring.profiles.active}")
+    private String currentRunEnvironment;
+
+    /**
+     * 指定某种运行环境下关闭权限校验；为了方便开发，一般我们的dev环境会关闭接口权限校验
+     * @return
+     */
+    @Override
+    public CloseAuthorityEvironment customCloseAuthorityEvironment(){
+        return new CloseAuthorityEvironment(currentRunEnvironment,"dev");
+    }
+}
+```
+
 
