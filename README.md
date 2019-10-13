@@ -87,3 +87,7 @@ public class MybatisPlusConfig extends GlobalMybatisConfig {
 }
 ```
 
+##### 2.4 swagger集成与配置
+
+###### 2.4.1 导入swagger依赖
+
