@@ -6,7 +6,7 @@ smm-framework（以后简称smm框架） 是由SpringBoot + Mybatis Plus + Mysql
 ##### 2.2 搜索框中输入alanchenyan/smm-framework
 ##### 2.3 可以在当前页面中查看到smm框架所有历史版本以及导入方式
 
-- gradle导入方式
+**gradle导入方式**
 
 Step 1. Add the JitPack repository to your build file
 ```
@@ -24,7 +24,7 @@ dependencies {
 }
 ```
 
-- maven导入方式
+**maven导入方式**
 
 Step 1. Add the JitPack repository to your build file
 ```
