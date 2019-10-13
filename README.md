@@ -46,6 +46,8 @@ Step 2. Add the dependency
 
 #### 二、功能使用说明
 
+以下相关功能的集成以maven为例
+
 ##### 2.1 跨域请求配置
 继承GlobalCorsConfig
 ```
@@ -67,7 +69,21 @@ public class ExceptionHandler extends GlobalExceptionHandler {
 }
 ```
 
+##### 2.3 mybatis plus集成与配置
 
+###### 2.3.1 导入mybatis plus依赖
+```
+<dependency>
+    <groupId>com.baomidou</groupId>
+    <artifactId>mybatis-plus-boot-starter</artifactId>
+    <version>3.0.3</version>
+</dependency>
+```
+###### 2.3.2 继承GlobalMybatisConfig
+```
+@Configuration
+public class MybatisPlusConfig extends GlobalMybatisConfig {
 
-
+}
+```
 
