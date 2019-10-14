@@ -2,41 +2,45 @@
 smm-framework（以后简称smm框架） 是由SpringBoot + Mybatis Plus + Mysql 组成的一套开发框架。该套框架基于约定大于配置的原则实现了大部分项目开发中需要用到的功能模块，比如接口权限控制JWT Token、MybatisPlus集成与配置、Swagger继承与配置、跨域配置、全局异常处理、API接口实现统一格式返回等等。smm框架基于Jdk 1.8、SpringBoot 2.1.8开发，同时遵循《阿里巴巴Java开发手册V1.5》、API接口遵循Restful风格。
 
 #### 一、在项目中引入smm框架
-##### 1.1 输入网址https://jitpack.io
-##### 1.2 搜索框中输入alanchenyan/smm-framework
-##### 1.3 可以在当前页面中查看到smm框架所有历史版本以及导入方式
 
 **以maven导入方式为例**
 
-Step 1. Add the JitPack repository to your build file
+##### 1.1 配置jitpack.io的repository
+smm-framework-parent、smm-framework都发布在jitpack.io，所以要配置jitpack.io的repository
 ```
 <repositories>
-  <repository>
-      <id>jitpack.io</id>
-      <url>https://jitpack.io</url>
-  </repository>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
 </repositories>
 ```
 
-Step 2. Add the dependency
+##### 1.2 parent设置为smm-framework-parent
+```
+<parent>
+    <groupId>com.github.alanchenyan</groupId>
+    <artifactId>smm-framework-parent</artifactId>
+    <version>1.0.2</version>
+</parent>
+```
+smm-framework-parent是smm框架父级依赖，smm-framework-parent已经将所用框架的依赖都配置好了，你的项目中只要将parent设置为smm-framework-parent进行依赖传递，spring boot、mysql-connector-java、mybatis plus、swagger2、hibernate-validator等等都不需要配置了，在你的项目中只需要配置你项目中独有的第三方框架。
+
+##### 1.3依赖smm框架
 ```
 <dependency>
     <groupId>com.github.alanchenyan</groupId>
     <artifactId>smm-framework</artifactId>
-    <version>1.1.5</version>
+    <version>1.2.5</version>
 </dependency>
 ```
 
-Step 3. Set parent
-```
-<parent>
-    <groupId>com.github.alanchenyan</groupId>
-    <artifactId>smm-framework</artifactId>
-    <version>1.1.7</version>
-    <relativePath/> 
-</parent>
-```
-需要重点说明的是，如果你的项目中将parent配置成了smm框架（即Step 3），那么smm框架中已经配置导入的依赖，你的项目中不需要再重新配置依赖，如spring boot、mysql-connector-java、mybatis plus、swagger2、hibernate-validator等等。
+##### 拓展：对jitpack.io介绍
+
+- 输入网址https://jitpack.io
+
+- 搜索框中输入alanchenyan/smm-framework 或 alanchenyan/smm-framework-parent，可以在当前页面中查看到smm框架所有历史版本以及导入方式
+
 
 #### 二、功能使用说明
 
@@ -184,12 +188,17 @@ public class ResponseResult {
 ```
 @EnableWebMvc
 @Configuration
-public class ControllerReturnConfig extends GlobalReturnConfig {
+@RestControllerAdvice({"com.netx.web.controller"})
+public class ControllerReturnConfig  extends GlobalReturnConfig {
 
 }
 ```
 
-所以Controller层API不需要显示地返回ResponseResult，因为会全局处理并返回ResponseResult格式，如一下代码
+注意：@RestControllerAdvice要设置扫描拦截包名，如：com.netx.web.controller。这样就只拦截controller包下的类。否则swagger也会拦截影响swagger正常使用
+
+
+全局拦截后Controller层API不需要显示地返回ResponseResult，因为会全局拦截处理并返回ResponseResult格式，如一下代码
+
 ```
  @ApiOperation("新增代理")
   @PostMapping
