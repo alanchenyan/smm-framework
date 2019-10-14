@@ -84,7 +84,8 @@ public class SwaggerConfig extends GloablSwaggerConfig {
 }
 ```
 
-另外，Swagger通常只在本地开发环境或内网测试环境开启，生产环境中Swagger一般都是需要关闭的。因此我们提供了一个抽象方法boolean swaggerEnable()需要你来指定Swagger是否开启，通常这个开关配置在配置文件中，开发环境设置为true,生产设置成false，如下：
+##### 2.4.1 设置是否开启Swagger
+Swagger通常只在本地开发环境或内网测试环境开启，生产环境中Swagger一般都是需要关闭的。因此我们提供了一个抽象方法boolean swaggerEnable()需要你来指定Swagger是否开启，通常这个开关配置在配置文件中，开发环境设置为true,生产设置成false，如下：
 
 ```
 @Configuration
@@ -94,16 +95,31 @@ public class SwaggerConfig extends GloablSwaggerConfig {
     private boolean enable;
 
     @Override
-    public String swaggerTile() {
-        return "网值Boss API列表";
-    }
-
-    @Override
     public boolean swaggerEnable() {
         return enable;
     }
 }
 ```
+
+##### 2.4.2 设置多个Docket
+有时候API会分为多个模块，因此需要对API进行分组显示，此时可以重写configureSwaggerApiInfo（）方法，返回多个你需要的ApiInfo，例如：
+```
+@Override
+protected List<SwaggerApiInfo> configureSwaggerApiInfo() {
+
+    List<SwaggerApiInfo> swaggerApiInfos = new ArrayList<>();
+
+    SwaggerApiInfo userModelApiInfo = new SwaggerApiInfo("用户模块API接口文档","com.netx.user.controller","V1.0");
+    swaggerApiInfos.add(userModelApiInfo);
+
+    SwaggerApiInfo lawyerModelApiInfo = new SwaggerApiInfo("律师模块API接口文档","com.netx.lawyer.controller","V1.0.1");
+    swaggerApiInfos.add(lawyerModelApiInfo);
+
+    return swaggerApiInfos;
+}
+```
+暂时最多支持配置10个Docket，正常情况下10个已经足够了，如果需要，smm框架还能提供更多的配置数量。
+
 
 ##### 2.5 接口权限控制JWT Token配置
 
