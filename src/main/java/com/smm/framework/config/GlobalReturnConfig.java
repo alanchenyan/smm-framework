@@ -37,7 +37,8 @@ public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object returnObj, MethodParameter methodParameter, MediaType mediaType, Class<? extends HttpMessageConverter<?>> aClass, ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
 
-        if(returnObj==null){ // 返回值为void
+        // 返回值为void
+        if(returnObj==null){
             return ResponseResult.success();
         }
 

@@ -1,6 +1,7 @@
 package com.smm.framework.config.swagger;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -9,6 +10,7 @@ import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,8 @@ import java.util.List;
  * @description Swagger文档配置
  * @date 2019/5/15
  */
-
+@Configuration
+@EnableSwagger2
 public class GlobalSwaggerConfig implements WebMvcConfigurer {
 
 
@@ -91,7 +94,7 @@ public class GlobalSwaggerConfig implements WebMvcConfigurer {
 
 
     @Bean
-    public Docket createRestApi_0() {
+    public Docket createRestApiZero() {
         if(docketList == null){
             initDockets();
         }
@@ -99,47 +102,47 @@ public class GlobalSwaggerConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public Docket createRestApi_1() {
+    public Docket createRestApiOne() {
         return docketList.get(1);
     }
 
     @Bean
-    public Docket createRestApi_2() {
+    public Docket createRestApiTwo() {
         return docketList.get(2);
     }
 
     @Bean
-    public Docket createRestApi_3() {
+    public Docket createRestApiThree() {
         return docketList.get(3);
     }
 
     @Bean
-    public Docket createRestApi_4() {
+    public Docket createRestApiFour() {
         return docketList.get(4);
     }
 
     @Bean
-    public Docket createRestApi_5() {
+    public Docket createRestApiFive() {
         return docketList.get(5);
     }
 
     @Bean
-    public Docket createRestApi_6() {
+    public Docket createRestApiSix() {
         return docketList.get(6);
     }
 
     @Bean
-    public Docket createRestApi_7() {
+    public Docket createRestApiSeven() {
         return docketList.get(7);
     }
 
     @Bean
-    public Docket createRestApi_8() {
+    public Docket createRestApiEight() {
         return docketList.get(8);
     }
 
     @Bean
-    public Docket createRestApi_9() {
+    public Docket createRestApiNine() {
         return docketList.get(9);
     }
 

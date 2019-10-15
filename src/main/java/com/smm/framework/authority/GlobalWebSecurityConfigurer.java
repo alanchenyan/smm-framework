@@ -23,7 +23,7 @@ import java.util.Date;
  */
 @Configuration
 @Order(SecurityProperties.BASIC_AUTH_ORDER)
-public abstract class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     AuthenticationEntryPoint globalAuthenticationEntryPoint = new GlobalAuthenticationEntryPoint();
 
