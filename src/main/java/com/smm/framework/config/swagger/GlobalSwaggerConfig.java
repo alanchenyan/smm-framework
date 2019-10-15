@@ -19,8 +19,10 @@ import java.util.List;
  * @date 2019/5/15
  */
 
-public abstract class GlobalSwaggerConfig implements WebMvcConfigurer {
+public class GlobalSwaggerConfig implements WebMvcConfigurer {
 
+
+    private final int DOCKET_MAX_SIZE =10;
 
     private List<Docket> docketList;
 
@@ -30,32 +32,6 @@ public abstract class GlobalSwaggerConfig implements WebMvcConfigurer {
      */
     public boolean swaggerEnable(){
         return true;
-    }
-
-
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(new String[]{"/**"}).addResourceLocations(new String[]{"classpath:/static/"});
-        registry.addResourceHandler(new String[]{"swagger-ui.html"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
-        registry.addResourceHandler(new String[]{"/webjars/**"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
-    }
-
-    private void initDockets(){
-
-        List<SwaggerApiInfo> swaggerApiInfoList = configureSwaggerApiInfo();
-
-        docketList = new ArrayList<>(swaggerApiInfoList.size());
-
-        for(SwaggerApiInfo swaggerApiInfo : swaggerApiInfoList){
-
-            ApiInfo apiInfo = (new ApiInfoBuilder()).title(swaggerApiInfo.getGroupName()).description("").termsOfServiceUrl("").version(swaggerApiInfo.getVersion()).build();
-
-            Docket docket = (new Docket(DocumentationType.SWAGGER_2)).groupName(swaggerApiInfo.getGroupName()).enable(swaggerEnable()).apiInfo(apiInfo).select()
-                    .apis(RequestHandlerSelectors.basePackage(swaggerApiInfo.getBasePackage())).paths(PathSelectors.any()).build();
-
-            docketList.add(docket);
-        }
-
     }
 
     /**
@@ -70,99 +46,101 @@ public abstract class GlobalSwaggerConfig implements WebMvcConfigurer {
     }
 
 
-    @Bean
-    public Docket createRestApi_1() {
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler(new String[]{"/**"}).addResourceLocations(new String[]{"classpath:/static/"});
+        registry.addResourceHandler(new String[]{"swagger-ui.html"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
+        registry.addResourceHandler(new String[]{"/webjars/**"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
+    }
 
+    private void initDockets(){
+
+        docketList = new ArrayList<>(DOCKET_MAX_SIZE);
+
+        List<SwaggerApiInfo> swaggerApiInfoList = configureSwaggerApiInfo();
+
+        if(swaggerApiInfoList.size()>DOCKET_MAX_SIZE){
+            throw new RuntimeException("smm框架Swagger最多只支持配置"+DOCKET_MAX_SIZE+"个Docket");
+        }
+
+        initConfigureDockets(swaggerApiInfoList);
+
+        initDisableDockets(swaggerApiInfoList.size());
+    }
+
+    private void initDisableDockets(int configureDocketsSize){
+        for(int i=configureDocketsSize-1;i<DOCKET_MAX_SIZE;i++){
+            Docket disableDocket= (new Docket(DocumentationType.SWAGGER_2)).groupName(i+"").enable(false);
+            docketList.add(disableDocket);
+        }
+    }
+
+
+
+    private void initConfigureDockets(List<SwaggerApiInfo> swaggerApiInfoList){
+        for(SwaggerApiInfo swaggerApiInfo : swaggerApiInfoList){
+
+            ApiInfo apiInfo = (new ApiInfoBuilder()).title(swaggerApiInfo.getGroupName()).description("").termsOfServiceUrl("").version(swaggerApiInfo.getVersion()).build();
+
+            Docket docket = (new Docket(DocumentationType.SWAGGER_2)).groupName(swaggerApiInfo.getGroupName()).enable(swaggerEnable()).apiInfo(apiInfo).select()
+                    .apis(RequestHandlerSelectors.basePackage(swaggerApiInfo.getBasePackage())).paths(PathSelectors.any()).build();
+
+            docketList.add(docket);
+        }
+    }
+
+
+    @Bean
+    public Docket createRestApi_0() {
         if(docketList == null){
             initDockets();
         }
+        return docketList.get(0);
+    }
 
-        if(docketList.size()>=1){
-            return docketList.get(0);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("1").enable(false);
-        }
+    @Bean
+    public Docket createRestApi_1() {
+        return docketList.get(1);
     }
 
     @Bean
     public Docket createRestApi_2() {
-        if(docketList.size()>=2){
-            return docketList.get(1);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("2").enable(false);
-        }
+        return docketList.get(2);
     }
 
     @Bean
     public Docket createRestApi_3() {
-        if(docketList.size()>=3){
-            return docketList.get(2);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("3").enable(false);
-        }
+        return docketList.get(3);
     }
 
     @Bean
     public Docket createRestApi_4() {
-        if(docketList.size()>=4){
-            return docketList.get(3);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("4").enable(false);
-        }
+        return docketList.get(4);
     }
 
     @Bean
     public Docket createRestApi_5() {
-        if(docketList.size()>=5){
-            return docketList.get(4);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("5").enable(false);
-        }
+        return docketList.get(5);
     }
 
     @Bean
     public Docket createRestApi_6() {
-        if(docketList.size()>=6){
-            return docketList.get(5);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("6").enable(false);
-        }
+        return docketList.get(6);
     }
 
     @Bean
     public Docket createRestApi_7() {
-        if(docketList.size()>=7){
-            return docketList.get(6);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("7").enable(false);
-        }
+        return docketList.get(7);
     }
 
     @Bean
     public Docket createRestApi_8() {
-        if(docketList.size()>=8){
-            return docketList.get(7);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("8").enable(false);
-        }
+        return docketList.get(8);
     }
 
     @Bean
     public Docket createRestApi_9() {
-        if(docketList.size()>=9){
-            return docketList.get(8);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("9").enable(false);
-        }
-    }
-
-    @Bean
-    public Docket createRestApi_10() {
-        if(docketList.size()>=10){
-            return docketList.get(9);
-        }else{
-            return (new Docket(DocumentationType.SWAGGER_2)).groupName("10").enable(false);
-        }
+        return docketList.get(9);
     }
 
 }
