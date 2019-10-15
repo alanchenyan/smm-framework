@@ -1,8 +1,9 @@
 package com.smm.framework.exception;
 
 /**
- * @author -Huang
- * @create 2019-09-04 16:30
+ * @author Alan Chen
+ * @description 业务异常
+ * @date 2019/5/15
  */
 public class ServiceException extends RuntimeException {
     public ServiceException() {

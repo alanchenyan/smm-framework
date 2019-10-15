@@ -2,9 +2,11 @@ package com.smm.framework.response;
 
 import lombok.Data;
 
+
 /**
- * @Author -Huang
- * @create 2019/9/2 17:21
+ * @author Alan Chen
+ * @description 响应前端统一格式
+ * @date 2019/5/15
  */
 @Data
 public class ResponseResult {
@@ -23,7 +25,7 @@ public class ResponseResult {
     }
 
     public static ResponseResult success(Object data){
-        return new ResponseResult(200,"操作成功！",data);
+        return new ResponseResult(200,"",data);
     }
 
     public static ResponseResult success(){

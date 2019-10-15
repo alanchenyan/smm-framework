@@ -8,10 +8,10 @@ import org.slf4j.LoggerFactory;
 import java.util.Date;
 
 /**
-*
-*@author  feizaishui
-*@since 处理时间的填充
-*/
+ * @author Alan Chen
+ * @description 处理时间自动填充
+ * @date 2019/5/15
+ */
 public class GlobalMetaObjectHandler implements MetaObjectHandler {
 
     private Logger logger = LoggerFactory.getLogger(GlobalMetaObjectHandler.class);

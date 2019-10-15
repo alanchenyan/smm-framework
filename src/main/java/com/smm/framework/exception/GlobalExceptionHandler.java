@@ -39,11 +39,11 @@ public class GlobalExceptionHandler {
         for (FieldError error : exception.getBindingResult().getFieldErrors()) {
             stringBuffer.append(error.getDefaultMessage()).append(";");
         }
-        return ResponseResult.info(stringBuffer.toString());
+        return ResponseResult.fail(stringBuffer.toString());
     }
 
     /**
-     * 拦截捕捉自定义异常 CommonException.class
+     * 拦截捕捉业务异常 ServiceException.class
      * @param ex
      * @return
      */

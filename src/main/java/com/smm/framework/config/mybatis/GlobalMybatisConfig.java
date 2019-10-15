@@ -7,8 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * @author -Huang
- * @create 2019-09-04 17:17
+ * @author Alan Chen
+ * @description Mybatis
+ * @date 2019/5/15
  */
 @Configuration
 public class GlobalMybatisConfig {
