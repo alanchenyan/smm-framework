@@ -67,8 +67,12 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
 
     private void returnToken(HttpServletResponse response, String token) {
 
-        Map<String,Object> tokenMap = new HashMap(2);
-        tokenMap.put("token",token);
+        Map<String,Object> tokenMap = new HashMap(3);
+
+        tokenMap.put("code",200);
+        tokenMap.put("msg","");
+        tokenMap.put("data",token);
+
         JSONObject responseJsonObject = new JSONObject(tokenMap);
 
         response.setCharacterEncoding("UTF-8");

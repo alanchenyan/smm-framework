@@ -124,7 +124,7 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         http.addFilter(usernamePasswordAuthenticationFilter)
                 .addFilter(basicAuthenticationFilter);
 
-        http.exceptionHandling().authenticationEntryPoint(globalAuthenticationEntryPoint).accessDeniedHandler(globalAccessDeniedHandler);
+        http.exceptionHandling().accessDeniedHandler(globalAccessDeniedHandler).authenticationEntryPoint(globalAuthenticationEntryPoint);
         // 禁用 SESSION、JSESSIONID
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
