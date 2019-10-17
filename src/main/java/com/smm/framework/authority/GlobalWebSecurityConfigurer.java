@@ -35,7 +35,7 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     protected Date expirationDate(){
-        return new Date(System.currentTimeMillis() + 30 * 60 * 1000);
+        return new Date(System.currentTimeMillis() + 180 * 60 * 1000);
     }
 
     /**
