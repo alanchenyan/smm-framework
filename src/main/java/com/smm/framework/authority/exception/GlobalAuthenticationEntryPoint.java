@@ -20,17 +20,17 @@ import java.util.Map;
 @Component
 public class GlobalAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
-        responseException(httpServletResponse);
+    public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e)  {
+        responseException(httpServletResponse,e);
     }
 
-    private void responseException(HttpServletResponse response) {
+    private void responseException(HttpServletResponse response,AuthenticationException exception) {
 
         Map<String,Object> exceptionMap = new HashMap(3);
 
         exceptionMap.put("code",403);
         exceptionMap.put("msg","授权认证失败");
-        exceptionMap.put("data","");
+        exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);
 

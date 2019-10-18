@@ -20,17 +20,17 @@ import java.util.Map;
 @Component
 public class GlobalAccessDeniedHandler implements AccessDeniedHandler {
     @Override
-    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e) throws IOException {
-        responseException(httpServletResponse);
+    public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e)  {
+        responseException(httpServletResponse,e);
     }
 
-    private void responseException(HttpServletResponse response) {
+    private void responseException(HttpServletResponse response,AccessDeniedException exception) {
 
         Map<String,Object> exceptionMap = new HashMap(3);
 
         exceptionMap.put("code",403);
         exceptionMap.put("msg","认证用户访问无权限资源时的异常");
-        exceptionMap.put("data","");
+        exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);
         response.setCharacterEncoding("UTF-8");
