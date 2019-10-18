@@ -29,12 +29,12 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
 
     private AuthenticationManager authenticationManager;
     private String signingKey;
-    private Date expirationDate;
+    private long expirationTime;
 
-    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,Date expirationDate) {
+    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime) {
         this.authenticationManager = authenticationManager;
         this.signingKey = signingKey;
-        this.expirationDate = expirationDate;
+        this.expirationTime = expirationTime;
     }
 
     @Override
@@ -58,7 +58,7 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
                                             FilterChain chain, Authentication authResult) {
         String token = Jwts.builder()
                 .setSubject(((User) authResult.getPrincipal()).getUsername())
-                .setExpiration(expirationDate)
+                .setExpiration(new Date(System.currentTimeMillis() +  expirationTime))
                 .signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();
 

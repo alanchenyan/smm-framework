@@ -34,8 +34,8 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         return "PrivateSecret";
     }
 
-    protected Date expirationDate(){
-        return new Date(System.currentTimeMillis() + 180 * 60 * 1000);
+    protected long expirationTime(){
+        return 180 * 60 * 1000;
     }
 
     /**
@@ -118,7 +118,7 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private void commonConfigure(HttpSecurity http) throws Exception{
 
-        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationDate());
+        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationTime());
         GlobalBasicAuthenticationFilter basicAuthenticationFilter = new GlobalBasicAuthenticationFilter(authenticationManager(),signingKey());
 
         http.addFilter(usernamePasswordAuthenticationFilter)
