@@ -179,7 +179,12 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
 重写String signingKey()方法，返回你的私钥
 
 ###### 2.5.5 设置Token过期时间
-重写Date expirationDate()方法
+重写long expirationTime()方法,如：
+```
+    protected long expirationTime(){
+        return 180 * 60 * 1000; //token有效期为3小时
+    }
+```
 
 ###### 2.5.6 自定义放行接口
 如果你需要指定某些接口要放行，你可以重写customConfigure(HttpSecurity http)，通过HttpSecurity设置放行接口，然后返回设置后的HttpSecurity
