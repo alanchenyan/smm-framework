@@ -1,6 +1,7 @@
 package com.smm.framework.exception;
 
 import com.smm.framework.response.ResponseResult;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @description 全局异常处理
  * @date 2019/5/15
  */
+@Slf4j
 @ControllerAdvice
 @Component
 public class GlobalExceptionHandler {
@@ -24,6 +26,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public ResponseResult errorHandler(Exception ex) {
+        log.error("系统异常Exception："+ex.getMessage());
         return ResponseResult.fail(ex.getMessage());
     }
 
@@ -39,6 +42,7 @@ public class GlobalExceptionHandler {
         for (FieldError error : exception.getBindingResult().getFieldErrors()) {
             stringBuffer.append(error.getDefaultMessage()).append(";");
         }
+        log.error("数据校验异常MethodArgumentNotValidException："+stringBuffer.toString());
         return ResponseResult.fail(stringBuffer.toString());
     }
 
@@ -50,6 +54,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = ServiceException.class)
     public ResponseResult commonExceptionHandler(ServiceException ex) {
+        log.error("业务异常ServiceException："+ex.getMessage());
         return ResponseResult.info(ex.getMessage());
     }
 
