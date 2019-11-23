@@ -55,8 +55,8 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
         String password = this.obtainPassword(request);
 
         if(StringUtils.isNotBlank(loginEncryptRsaPrivateKey)){
-            username = RsaUtil.publicEncrypt(username,loginEncryptRsaPrivateKey);
-            password = RsaUtil.publicEncrypt(password,loginEncryptRsaPrivateKey);
+            username = RsaUtil.privateDecrypt(username,loginEncryptRsaPrivateKey);
+            password = RsaUtil.privateDecrypt(password,loginEncryptRsaPrivateKey);
         }
 
         return authenticationManager.authenticate(
