@@ -1,8 +1,10 @@
 package com.smm.framework.authority;
 
 import com.alibaba.fastjson.JSONObject;
+import com.smm.framework.authority.rsa.RsaUtil;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -28,13 +30,21 @@ import java.util.Map;
 public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
+
+    //JWT 私钥
     private String signingKey;
+
+    //JWT Token有效期时间
     private long expirationTime;
 
-    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime) {
+    //RSA私钥
+    private String rsaPrivateKey;
+
+    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime,String rsaPrivateKey) {
         this.authenticationManager = authenticationManager;
         this.signingKey = signingKey;
         this.expirationTime = expirationTime;
+        this.rsaPrivateKey = rsaPrivateKey;
     }
 
     @Override
@@ -43,6 +53,11 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
 
         String username = this.obtainUsername(request);
         String password = this.obtainPassword(request);
+
+        if(StringUtils.isNotBlank(rsaPrivateKey)){
+            username = RsaUtil.publicEncrypt(username,rsaPrivateKey);
+            password = RsaUtil.publicEncrypt(password,rsaPrivateKey);
+        }
 
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(

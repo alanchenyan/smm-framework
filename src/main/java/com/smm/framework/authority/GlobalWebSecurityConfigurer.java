@@ -30,10 +30,27 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     AccessDeniedHandler globalAccessDeniedHandler = new GlobalAccessDeniedHandler();
 
 
+    /**
+     * JWT 私钥
+     * @return
+     */
     protected String signingKey(){
         return "PrivateSecret";
     }
 
+
+    /**
+     * RSA私钥
+     * @return
+     */
+    protected String rsaPrivateKey(){
+        return null;
+    }
+
+    /**
+     * JWT Token有效期时间
+     * @return
+     */
     protected long expirationTime(){
         return 180 * 60 * 1000;
     }
@@ -118,7 +135,7 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private void commonConfigure(HttpSecurity http) throws Exception{
 
-        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationTime());
+        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationTime(),rsaPrivateKey());
         GlobalBasicAuthenticationFilter basicAuthenticationFilter = new GlobalBasicAuthenticationFilter(authenticationManager(),signingKey());
 
         http.addFilter(usernamePasswordAuthenticationFilter)
