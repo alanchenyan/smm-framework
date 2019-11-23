@@ -40,10 +40,10 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
 
     /**
-     * RSA私钥
+     * 登录时用RSA加密的私钥
      * @return
      */
-    protected String rsaPrivateKey(){
+    protected String loginEncryptRsaPrivateKey(){
         return null;
     }
 
@@ -135,7 +135,7 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private void commonConfigure(HttpSecurity http) throws Exception{
 
-        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationTime(),rsaPrivateKey());
+        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationTime(),loginEncryptRsaPrivateKey());
         GlobalBasicAuthenticationFilter basicAuthenticationFilter = new GlobalBasicAuthenticationFilter(authenticationManager(),signingKey());
 
         http.addFilter(usernamePasswordAuthenticationFilter)

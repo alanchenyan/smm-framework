@@ -37,14 +37,14 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
     //JWT Token有效期时间
     private long expirationTime;
 
-    //RSA私钥
-    private String rsaPrivateKey;
+    //登录时用RSA加密的私钥
+    private String loginEncryptRsaPrivateKey;
 
-    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime,String rsaPrivateKey) {
+    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime,String loginEncryptRsaPrivateKey) {
         this.authenticationManager = authenticationManager;
         this.signingKey = signingKey;
         this.expirationTime = expirationTime;
-        this.rsaPrivateKey = rsaPrivateKey;
+        this.loginEncryptRsaPrivateKey = loginEncryptRsaPrivateKey;
     }
 
     @Override
@@ -54,9 +54,9 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
         String username = this.obtainUsername(request);
         String password = this.obtainPassword(request);
 
-        if(StringUtils.isNotBlank(rsaPrivateKey)){
-            username = RsaUtil.publicEncrypt(username,rsaPrivateKey);
-            password = RsaUtil.publicEncrypt(password,rsaPrivateKey);
+        if(StringUtils.isNotBlank(loginEncryptRsaPrivateKey)){
+            username = RsaUtil.publicEncrypt(username,loginEncryptRsaPrivateKey);
+            password = RsaUtil.publicEncrypt(password,loginEncryptRsaPrivateKey);
         }
 
         return authenticationManager.authenticate(

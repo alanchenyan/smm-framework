@@ -1,9 +1,7 @@
 package com.smm.framework.authority.rsa;
 
-
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
-
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.io.IOUtils;
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
 import java.security.*;
@@ -47,7 +45,7 @@ public class RsaUtil {
         }
 
         //初始化KeyPairGenerator对象,密钥长度
-        kpg.initialize(keySize);              
+        kpg.initialize(keySize);
         //生成密匙对
         KeyPair keyPair = kpg.generateKeyPair();
 
