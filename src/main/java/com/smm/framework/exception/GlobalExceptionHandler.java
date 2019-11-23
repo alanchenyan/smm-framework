@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseResult errorHandler(Exception ex) {
         log.error("系统异常Exception："+ex.getMessage());
+        ex.printStackTrace();
         return ResponseResult.fail(ex.getMessage());
     }
 
@@ -43,6 +44,7 @@ public class GlobalExceptionHandler {
             stringBuffer.append(error.getDefaultMessage()).append(";");
         }
         log.error("数据校验异常MethodArgumentNotValidException："+stringBuffer.toString());
+        exception.printStackTrace();
         return ResponseResult.fail(stringBuffer.toString());
     }
 
@@ -55,6 +57,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = ServiceException.class)
     public ResponseResult commonExceptionHandler(ServiceException ex) {
         log.error("业务异常ServiceException："+ex.getMessage());
+        ex.printStackTrace();
         return ResponseResult.info(ex.getMessage());
     }
 

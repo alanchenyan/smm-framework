@@ -1,5 +1,6 @@
 package com.smm.framework.config;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.smm.framework.exception.ServiceException;
 import com.smm.framework.response.ResponseResult;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +11,10 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
+
+import java.util.List;
 
 /**
  * @author Alan Chen
@@ -27,7 +31,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 @EnableWebMvc
 @Configuration
 @RestControllerAdvice
-public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> {
+public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcConfigurer {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
@@ -47,11 +51,16 @@ public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> {
             return returnObj;
         }
 
-        if(returnObj instanceof String){
-            throw new ServiceException("Controller层暂时不支持返回String类型参数。如需返回String参数，请用ResponseResult.success(obj)方式返回");
-        }
-
         return  ResponseResult.success(returnObj);
 
+    }
+
+    /**
+     * 解决不能返回单个字符的问题
+     * @param converters
+     */
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(new FastJsonHttpMessageConverter());
     }
 }
