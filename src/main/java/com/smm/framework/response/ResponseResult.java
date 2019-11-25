@@ -27,11 +27,11 @@ public class ResponseResult {
     }
 
     public static ResponseResult success(){
-        return new ResponseResult(200,"操作成功！",null);
+        return new ResponseResult(200,"操作成功！","200");
     }
 
     public static ResponseResult info(String msg){
-        return new ResponseResult(600,msg,null);
+        return new ResponseResult(600,msg,"600");
     }
 
     public static ResponseResult fail(Object data){
@@ -39,7 +39,7 @@ public class ResponseResult {
     }
 
     public static ResponseResult fail(){
-        return new ResponseResult(500,"服务器出错啦！",null);
+        return new ResponseResult(500,"服务器出错啦！","500");
     }
 
 }
