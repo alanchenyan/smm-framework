@@ -14,9 +14,7 @@ public class ResponseResult {
     private String msg;
     private Object data;
 
-    private ResponseResult(int code, String msg) {
-        this(code,msg,null);
-    }
+    private ResponseResult(){}
 
     private ResponseResult(int code, String msg, Object data) {
         this.code = code;
@@ -29,11 +27,11 @@ public class ResponseResult {
     }
 
     public static ResponseResult success(){
-        return new ResponseResult(200,"操作成功！");
+        return new ResponseResult(200,"操作成功！",null);
     }
 
     public static ResponseResult info(String msg){
-        return new ResponseResult(600,msg);
+        return new ResponseResult(600,msg,null);
     }
 
     public static ResponseResult fail(Object data){
@@ -41,7 +39,7 @@ public class ResponseResult {
     }
 
     public static ResponseResult fail(){
-        return new ResponseResult(500,"服务器出错啦！");
+        return new ResponseResult(500,"服务器出错啦！",null);
     }
 
 }
