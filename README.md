@@ -189,6 +189,9 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
 ###### 2.5.6 自定义放行接口
 如果你需要指定某些接口要放行，你可以重写customConfigure(HttpSecurity http)，通过HttpSecurity设置放行接口，然后返回设置后的HttpSecurity
 
+###### 2.5.7 登录用RSA非对称性加密对用户名、密码进行加密安全传输
+ 重写 GlobalWebSecurityConfigurer类的protected String loginEncryptRsaPrivateKey()方法，配置你的RSA私钥。同时前端也需要配合用对应的RSA公钥对用户名、密码进行加密。
+详情可参考：[用非对称性加密保障Web登录安全](https://www.jianshu.com/p/0fe3a7ae2256)
 
 ##### 2.6 Restful API 返回统一的数据格式到前端
 
