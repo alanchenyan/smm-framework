@@ -1,7 +1,6 @@
 package com.smm.framework.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.smm.framework.exception.ServiceException;
 import com.smm.framework.response.ResponseResult;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;

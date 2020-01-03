@@ -31,13 +31,19 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
 
     private AuthenticationManager authenticationManager;
 
-    //JWT 私钥
+    /**
+     * JWT 私钥
+     */
     private String signingKey;
 
-    //JWT Token有效期时间
+    /**
+     * JWT Token有效期时间
+     */
     private long expirationTime;
 
-    //登录时用RSA加密的私钥
+    /**
+     * 登录时用RSA加密的私钥
+     */
     private String loginEncryptRsaPrivateKey;
 
     public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime,String loginEncryptRsaPrivateKey) {

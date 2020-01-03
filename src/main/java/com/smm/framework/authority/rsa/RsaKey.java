@@ -10,10 +10,14 @@ import lombok.Data;
 @Data
 public class RsaKey {
 
-    //公钥
+    /**
+     * 公钥
+     */
     private String publicKey;
 
-    //私钥
+    /**
+     * 私钥
+     */
     private String privateKey;
 
 }

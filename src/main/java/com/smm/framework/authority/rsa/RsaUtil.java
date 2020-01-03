@@ -4,6 +4,7 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
@@ -215,7 +216,7 @@ public class RsaUtil {
         }
     }
 
-    private static byte[] rsaSplitCodec(Cipher cipher, int opmode, byte[] datas, int keySize){
+    private static byte[] rsaSplitCodec(Cipher cipher, int opmode, byte[] datas, int keySize) throws IOException {
         int maxBlock = 0;
         if(opmode == Cipher.DECRYPT_MODE){
             maxBlock = keySize / 8;
@@ -241,7 +242,7 @@ public class RsaUtil {
             throw new RuntimeException("加解密阀值为["+maxBlock+"]的数据时发生异常", e);
         }
         byte[] resultDatas = out.toByteArray();
-        IOUtils.closeQuietly(out);
+        out.close();
         return resultDatas;
     }
 

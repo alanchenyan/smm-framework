@@ -53,7 +53,7 @@ public class GlobalBasicAuthenticationFilter extends BasicAuthenticationFilter {
         if (null != user) {
             return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
         }else{
-            throw new ServiceException("授权失败");
+            throw new ServiceException(AuthorityMessage.AUTHENTICATION_FAILED.getMessage());
         }
     }
 }

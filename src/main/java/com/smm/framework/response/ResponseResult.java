@@ -27,7 +27,7 @@ public class ResponseResult {
     }
 
     public static ResponseResult success(){
-        return new ResponseResult(200,"操作成功！","200");
+        return new ResponseResult(200,ResponseMessage.SUCCESS.getMessage(),"200");
     }
 
     public static ResponseResult info(String msg){
@@ -35,11 +35,11 @@ public class ResponseResult {
     }
 
     public static ResponseResult fail(Object data){
-        return new ResponseResult(500,"服务器出错啦！",data);
+        return new ResponseResult(500,ResponseMessage.SERVER_ERROR.getMessage(),data);
     }
 
     public static ResponseResult fail(){
-        return new ResponseResult(500,"服务器出错啦！","500");
+        return new ResponseResult(500,ResponseMessage.SERVER_ERROR.getMessage(),"500");
     }
 
 }

@@ -1,6 +1,7 @@
 package com.smm.framework.authority.exception;
 
 import com.alibaba.fastjson.JSONObject;
+import com.smm.framework.authority.AuthorityMessage;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class GlobalAccessDeniedHandler implements AccessDeniedHandler {
         Map<String,Object> exceptionMap = new HashMap(3);
 
         exceptionMap.put("code",403);
-        exceptionMap.put("msg","认证用户访问无权限资源时的异常");
+        exceptionMap.put("msg", AuthorityMessage.NO_ACCESS.getMessage());
         exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);

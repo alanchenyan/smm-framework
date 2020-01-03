@@ -1,6 +1,7 @@
 package com.smm.framework.authority.exception;
 
 import com.alibaba.fastjson.JSONObject;
+import com.smm.framework.authority.AuthorityMessage;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -29,7 +30,7 @@ public class GlobalAuthenticationEntryPoint implements AuthenticationEntryPoint 
         Map<String,Object> exceptionMap = new HashMap(3);
 
         exceptionMap.put("code",403);
-        exceptionMap.put("msg","授权认证失败");
+        exceptionMap.put("msg", AuthorityMessage.AUTHENTICATION_FAILED.getMessage());
         exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);
