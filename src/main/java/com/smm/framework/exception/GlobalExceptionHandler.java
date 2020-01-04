@@ -96,11 +96,12 @@ public class GlobalExceptionHandler {
 
             for (FieldError error : bindingResult.getFieldErrors()) {
                 String messageKey = error.getDefaultMessage();
-                String message = resource.getValue(messageKey);
-                if(StringUtils.isBlank(message)){
-                    message = messageKey;
+                try{
+                    String message = resource.getValue(messageKey);
+                    stringBuffer.append(message).append(";");
+                }catch (Exception e){
+                    stringBuffer.append(messageKey).append(";");
                 }
-                stringBuffer.append(message).append(";");
             }
         }else{
             for (FieldError error : bindingResult.getFieldErrors()) {
