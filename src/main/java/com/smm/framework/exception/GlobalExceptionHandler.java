@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     protected String responseMessageI18nSourcePath(){
-        return "i18n/server_message";
+        return "i18n/messages";
     }
 
 
