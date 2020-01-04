@@ -24,13 +24,6 @@ public interface I18nMessage {
      * @return
      */
     default String getMessage(){
-//        String messageI18n = "";
-//        try {
-//            String value = I18nResourceHandleMapping.getInstance(getI18nResourcePath()).getValue(getI18nKey());
-//            messageI18n = new String(value.getBytes("ISO-8859-1"), "UTF8");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
         return I18nResourceHandleMapping.getInstance(getI18nResourcePath()).getValue(getI18nKey());
     }
 }

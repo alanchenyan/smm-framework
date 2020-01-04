@@ -3,6 +3,7 @@ package com.smm.framework.exception;
 import com.smm.framework.i18n.I18nResource;
 import com.smm.framework.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -96,6 +97,9 @@ public class GlobalExceptionHandler {
             for (FieldError error : bindingResult.getFieldErrors()) {
                 String messageKey = error.getDefaultMessage();
                 String message = resource.getValue(messageKey);
+                if(StringUtils.isBlank(message)){
+                    message = messageKey;
+                }
                 stringBuffer.append(message).append(";");
             }
         }else{
