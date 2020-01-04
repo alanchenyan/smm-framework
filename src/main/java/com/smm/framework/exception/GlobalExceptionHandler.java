@@ -22,13 +22,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Component
 public class GlobalExceptionHandler {
 
-    private I18nResource resource;
+    private I18nResource validationI18nSource;
+
+    private I18nResource responseMessageI18nSource;
 
     /**
      * 是否开启Validator国际化功能
      * @return
      */
-    protected boolean enableValidationi18n(){
+    protected boolean enableValidationI18n(){
         return false;
     }
 
@@ -36,8 +38,24 @@ public class GlobalExceptionHandler {
      * 国际化文件地址
      * @return
      */
-    protected String validationMessageSourcePath(){
-        return "i18n/validation/validation";
+    protected String validationI18nSourcePath(){
+        return "i18n/validation";
+    }
+
+    /**
+     * 是否开启消息国际化
+     * @return
+     */
+    protected boolean enableResponseMessageI18n(){
+        return false;
+    }
+
+    /**
+     * 消息国际化文件地址
+     * @return
+     */
+    protected String responseMessageI18nSourcePath(){
+        return "i18n/server_message";
     }
 
 
@@ -85,22 +103,36 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = ServiceException.class)
     public ResponseResult commonExceptionHandler(ServiceException ex) {
+
         ex.printStackTrace();
+
+        if(enableResponseMessageI18n()){
+            responseMessageI18nSource = new I18nResource(responseMessageI18nSourcePath());
+            String messageKey = ex.getMessage();
+            try{
+                String message = responseMessageI18nSource.getValue(messageKey);
+                return ResponseResult.info(message);
+            }catch (Exception e){
+                return ResponseResult.info(ex.getMessage());
+            }
+        }
+
         return ResponseResult.info(ex.getMessage());
     }
+
 
     private ResponseResult doValidationException(BindingResult bindingResult){
         StringBuffer stringBuffer = new StringBuffer();
 
-        if(enableValidationi18n()){
-            if(resource == null){
-                resource = new I18nResource(validationMessageSourcePath());
+        if(enableValidationI18n()){
+            if(validationI18nSource == null){
+                validationI18nSource = new I18nResource(validationI18nSourcePath());
             }
 
             for (FieldError error : bindingResult.getFieldErrors()) {
                 String messageKey = error.getDefaultMessage();
                 try{
-                    String message = resource.getValue(messageKey);
+                    String message = validationI18nSource.getValue(messageKey);
                     stringBuffer.append(message).append(";");
                 }catch (Exception e){
                     stringBuffer.append(messageKey).append(";");
