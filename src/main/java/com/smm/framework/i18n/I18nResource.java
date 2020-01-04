@@ -26,7 +26,7 @@ public class I18nResource {
     protected ResourceBundleMessageSource resourceBundleMessageSource;
     private Object[] objs = {"language"};
 
-    protected I18nResource(String path) {
+    public I18nResource(String path) {
         resourceBundleMessageSource = new ResourceBundleMessageSource();
         resourceBundleMessageSource.setBasename(path);
     }

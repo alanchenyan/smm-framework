@@ -38,6 +38,6 @@ public enum ResponseMessage implements I18nMessage {
 
     @Override
     public String getI18nResourcePath() {
-        return "strings/response";
+        return "i18n/response";
     }
 }

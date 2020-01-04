@@ -1,8 +1,11 @@
 package com.smm.framework.exception;
 
+import com.smm.framework.i18n.I18nResource;
 import com.smm.framework.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,6 +21,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @Component
 public class GlobalExceptionHandler {
+
+    /**
+     * 是否开启Validator国际化功能
+     * @return
+     */
+    protected boolean enableValidationi18n(){
+        return false;
+    }
+
+    /**
+     * 国际化文件地址
+     * @return
+     */
+    protected String validationMessageSourcePath(){
+        return "i18n/validation/validation";
+    }
+
+
     /**
      * 全局异常捕捉处理
      * @param ex
@@ -26,7 +47,6 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = Exception.class)
     public ResponseResult errorHandler(Exception ex) {
-        log.error("系统异常Exception："+ex.getMessage());
         ex.printStackTrace();
         return ResponseResult.fail(ex.getMessage());
     }
@@ -37,15 +57,22 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ResponseBody
+    @ExceptionHandler(value = BindException.class)
+    public ResponseResult bindExceptionHandler(BindException exception) {
+        exception.printStackTrace();
+        return doValidationException(exception.getBindingResult());
+    }
+
+    /**
+     * validator校验失败信息处理
+     * @param exception
+     * @return
+     */
+    @ResponseBody
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseResult validationHandler(MethodArgumentNotValidException exception) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (FieldError error : exception.getBindingResult().getFieldErrors()) {
-            stringBuffer.append(error.getDefaultMessage()).append(";");
-        }
-        log.error("数据校验异常MethodArgumentNotValidException："+stringBuffer.toString());
         exception.printStackTrace();
-        return ResponseResult.fail(stringBuffer.toString());
+        return doValidationException(exception.getBindingResult());
     }
 
     /**
@@ -56,9 +83,27 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(value = ServiceException.class)
     public ResponseResult commonExceptionHandler(ServiceException ex) {
-        log.error("业务异常ServiceException："+ex.getMessage());
         ex.printStackTrace();
         return ResponseResult.info(ex.getMessage());
+    }
+
+    private ResponseResult doValidationException(BindingResult bindingResult){
+        StringBuffer stringBuffer = new StringBuffer();
+
+        if(enableValidationi18n()){
+            I18nResource resource = new I18nResource(validationMessageSourcePath());
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                String messageKey = error.getDefaultMessage();
+                String message = resource.getValue(messageKey);
+                stringBuffer.append(message).append(";");
+            }
+        }else{
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                stringBuffer.append(error.getDefaultMessage()).append(";");
+            }
+        }
+        return ResponseResult.fail(stringBuffer.toString());
     }
 
 }
