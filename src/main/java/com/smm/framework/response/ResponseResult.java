@@ -16,7 +16,9 @@ public class ResponseResult {
     private String msg;
     private Object data;
 
-    private static I18nResource i18nResource = I18nResourceFactory.getI18nResource();
+    //private static I18nResource i18nResource = I18nResourceFactory.getI18nResource();
+
+    private static I18nResource i18nResource;
 
     private ResponseResult(){}
 
@@ -39,6 +41,9 @@ public class ResponseResult {
     }
 
     public static ResponseResult fail(Object data){
+        if(i18nResource == null){
+            i18nResource = new I18nResource("i18n/server_message");
+        }
         return new ResponseResult(500,i18nResource.getValue("server_error"),data);
     }
 
