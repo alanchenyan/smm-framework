@@ -7,7 +7,7 @@ package com.smm.framework.i18n;
  */
 public class I18nResourceFactory {
 
-    private static I18nResource i18nResource = new I18nResource("i18n/server_message");
+    private static I18nResource i18nResource = new I18nResource("i18n/response_message");
 
     private I18nResourceFactory(){
 
