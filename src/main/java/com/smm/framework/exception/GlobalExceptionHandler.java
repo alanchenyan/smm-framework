@@ -3,7 +3,6 @@ package com.smm.framework.exception;
 import com.smm.framework.i18n.I18nResource;
 import com.smm.framework.response.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -22,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @ControllerAdvice
 @Component
 public class GlobalExceptionHandler {
+
+    private I18nResource resource;
 
     /**
      * 是否开启Validator国际化功能
@@ -92,7 +93,9 @@ public class GlobalExceptionHandler {
         StringBuffer stringBuffer = new StringBuffer();
 
         if(enableValidationi18n()){
-            I18nResource resource = new I18nResource(validationMessageSourcePath());
+            if(resource == null){
+                resource = new I18nResource(validationMessageSourcePath());
+            }
 
             for (FieldError error : bindingResult.getFieldErrors()) {
                 String messageKey = error.getDefaultMessage();

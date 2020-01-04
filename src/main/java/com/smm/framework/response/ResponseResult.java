@@ -1,5 +1,7 @@
 package com.smm.framework.response;
 
+import com.smm.framework.i18n.I18nResource;
+import com.smm.framework.i18n.I18nResourceFactory;
 import lombok.Data;
 
 
@@ -14,6 +16,8 @@ public class ResponseResult {
     private String msg;
     private Object data;
 
+    private static I18nResource i18nResource = I18nResourceFactory.getI18nResource();
+
     private ResponseResult(){}
 
     private ResponseResult(int code, String msg, Object data) {
@@ -27,7 +31,7 @@ public class ResponseResult {
     }
 
     public static ResponseResult success(){
-        return new ResponseResult(200,ResponseMessage.SUCCESS.getMessage(),"200");
+        return new ResponseResult(200,i18nResource.getValue("success"),"200");
     }
 
     public static ResponseResult info(String msg){
@@ -35,11 +39,11 @@ public class ResponseResult {
     }
 
     public static ResponseResult fail(Object data){
-        return new ResponseResult(500,ResponseMessage.SERVER_ERROR.getMessage(),data);
+        return new ResponseResult(500,i18nResource.getValue("server_error"),data);
     }
 
     public static ResponseResult fail(){
-        return new ResponseResult(500,ResponseMessage.SERVER_ERROR.getMessage(),"500");
+        return new ResponseResult(500,i18nResource.getValue("server_error"),"500");
     }
 
 }

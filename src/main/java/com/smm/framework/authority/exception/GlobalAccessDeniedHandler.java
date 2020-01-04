@@ -1,7 +1,8 @@
 package com.smm.framework.authority.exception;
 
 import com.alibaba.fastjson.JSONObject;
-import com.smm.framework.authority.AuthorityMessage;
+import com.smm.framework.i18n.I18nResource;
+import com.smm.framework.i18n.I18nResourceFactory;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,9 @@ import java.util.Map;
  */
 @Component
 public class GlobalAccessDeniedHandler implements AccessDeniedHandler {
+
+    private I18nResource i18nResource = I18nResourceFactory.getI18nResource();
+
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e)  {
         responseException(httpServletResponse,e);
@@ -30,7 +34,7 @@ public class GlobalAccessDeniedHandler implements AccessDeniedHandler {
         Map<String,Object> exceptionMap = new HashMap(3);
 
         exceptionMap.put("code",403);
-        exceptionMap.put("msg", AuthorityMessage.NO_ACCESS.getMessage());
+        exceptionMap.put("msg", i18nResource.getValue("no_access"));
         exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);
