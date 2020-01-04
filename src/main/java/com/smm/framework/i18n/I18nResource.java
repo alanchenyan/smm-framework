@@ -6,6 +6,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
@@ -28,6 +29,7 @@ public class I18nResource {
 
     public I18nResource(String path) {
         resourceBundleMessageSource = new ResourceBundleMessageSource();
+        resourceBundleMessageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         resourceBundleMessageSource.setBasename(path);
     }
 
