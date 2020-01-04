@@ -1,6 +1,8 @@
 package com.smm.framework.authority;
 
 import com.smm.framework.exception.ServiceException;
+import com.smm.framework.i18n.I18nResource;
+import com.smm.framework.i18n.I18nResourceFactory;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,6 +22,8 @@ import java.util.ArrayList;
  * @date 2019-10-12
  */
 public class GlobalBasicAuthenticationFilter extends BasicAuthenticationFilter {
+
+    private I18nResource i18nResource = I18nResourceFactory.getI18nResource();
 
     private String signingKey;
 
@@ -53,7 +57,7 @@ public class GlobalBasicAuthenticationFilter extends BasicAuthenticationFilter {
         if (null != user) {
             return new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
         }else{
-            throw new ServiceException(AuthorityMessage.AUTHENTICATION_FAILED.getMessage());
+            throw new ServiceException(i18nResource.getValue("authentication_failed"));
         }
     }
 }
