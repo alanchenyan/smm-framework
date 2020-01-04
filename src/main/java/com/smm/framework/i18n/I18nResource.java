@@ -55,7 +55,7 @@ public class I18nResource {
             }
             value = getValue(key, customerLocale);
         } catch (Exception e) {
-            value = getValue(key, Locale.TRADITIONAL_CHINESE);
+            value = getValue(key, defaultLocale());
         }
         return value;
     }
