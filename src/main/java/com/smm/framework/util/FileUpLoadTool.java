@@ -1,6 +1,8 @@
 package com.smm.framework.util;
 
 import com.smm.framework.exception.ServiceException;
+import com.smm.framework.i18n.I18nResource;
+import com.smm.framework.i18n.I18nResourceFactory;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,14 +17,19 @@ import java.io.IOException;
  */
 public class FileUpLoadTool {
 
+    private static long DEFAULT_MAX_SIZE_UNIT_KB = 30;
+
+    private static String DEFALUT_UPLOAD_FILE_DIRECTORY = "/uploadfiles/";
+
+    private static I18nResource i18nResource = I18nResourceFactory.getI18nResource();
+
     public static String uploadFile(MultipartFile file) {
         String directory = getDefalutUploadImagesDirectory();
         return uploadFile(file,directory);
     }
 
     public static String uploadFile(MultipartFile file,String fileDirectoryPath) {
-        long maxFileSizeUnitkb = 30;
-        return uploadFile(file,fileDirectoryPath,maxFileSizeUnitkb);
+        return uploadFile(file,fileDirectoryPath,DEFAULT_MAX_SIZE_UNIT_KB);
     }
 
     /**
@@ -36,7 +43,8 @@ public class FileUpLoadTool {
 
         long maxFileSizeByte = maxFileSizeUnitkb  * 1024;
         if(file.getSize() > maxFileSizeByte){
-            throw new ServiceException("最大可上传"+maxFileSizeUnitkb+"KB的文件,请调整后重新上传");
+            String tips = i18nResource.getValue("max_upload_file_size_01")  + maxFileSizeUnitkb + i18nResource.getValue("max_upload_file_size_02");
+            throw new ServiceException(tips);
         }
 
         try {
@@ -48,11 +56,11 @@ public class FileUpLoadTool {
                 file.transferTo(new File(fileDirectoryPath + imageName));
                 return imageName;
             }else{
-                throw new ServiceException("文件名称不合法");
+                throw new ServiceException(i18nResource.getValue("bad_filename"));
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ServiceException("图片上传失败");
+            throw new ServiceException(i18nResource.getValue("file_upload_failed"));
         }
     }
 
@@ -88,9 +96,9 @@ public class FileUpLoadTool {
             currentDirectory = new File(".").getCanonicalPath();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ServiceException("图片上传失败");
+            throw new ServiceException(i18nResource.getValue("file_upload_failed"));
         }
-        String directory = currentDirectory + "/uploadfiles/";
+        String directory = currentDirectory +DEFALUT_UPLOAD_FILE_DIRECTORY;
 
         File dirFile = new File(directory);
         if (!dirFile.exists()) {

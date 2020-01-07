@@ -107,7 +107,9 @@ public class GlobalExceptionHandler {
         ex.printStackTrace();
 
         if(enableResponseMessageI18n()){
-            responseMessageI18nSource = new I18nResource(responseMessageI18nSourcePath());
+            if(responseMessageI18nSource == null){
+                responseMessageI18nSource = new I18nResource(responseMessageI18nSourcePath());
+            }
             String messageKey = ex.getMessage();
             try{
                 String message = responseMessageI18nSource.getValue(messageKey);
