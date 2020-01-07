@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class FileUpLoadTool {
 
-    private static long DEFAULT_MAX_SIZE_UNIT_KB = 30;
+    private static long DEFAULT_MAX_SIZE_UNIT_KB = 1024 * 5;
 
     private static String DEFALUT_UPLOAD_FILE_DIRECTORY = "/uploadfiles/";
 
