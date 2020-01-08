@@ -17,19 +17,25 @@ import java.io.IOException;
  */
 public class FileUpLoadTool {
 
-    private static long DEFAULT_MAX_SIZE_UNIT_KB = 1024 * 5;
+    private static final long DEFAULT_MAX_SIZE_UNIT_KB = 1024 * 5;
 
-    private static String DEFALUT_UPLOAD_FILE_DIRECTORY = "/uploadfiles/";
+    private static final String DEFALUT_UPLOAD_FILE_DIRECTORY = "/uploadfiles/";
 
-    private static I18nResource i18nResource = I18nResourceFactory.getI18nResource();
+    public static final String FILE_REDIRECT_NAME = "files";
+
+    private static final I18nResource i18nResource = I18nResourceFactory.getI18nResource();
 
     public static String uploadFile(MultipartFile file) {
-        String directory = getDefalutUploadImagesDirectory();
+        String directory = getDefalutUploadFilesDirectory();
         return uploadFile(file,directory);
     }
 
     public static String uploadFile(MultipartFile file,String fileDirectoryPath) {
-        return uploadFile(file,fileDirectoryPath,DEFAULT_MAX_SIZE_UNIT_KB);
+        return uploadFile(file,fileDirectoryPath,FILE_REDIRECT_NAME,DEFAULT_MAX_SIZE_UNIT_KB);
+    }
+
+    public static String uploadFile(MultipartFile file,String fileDirectoryPath,String fileRedirectName) {
+        return uploadFile(file,fileDirectoryPath,fileRedirectName,DEFAULT_MAX_SIZE_UNIT_KB);
     }
 
     /**
@@ -39,7 +45,7 @@ public class FileUpLoadTool {
      * @param maxFileSizeUnitkb 文件最大大小（单位KB）
      * @return
      */
-    public static String uploadFile(MultipartFile file,String fileDirectoryPath,long maxFileSizeUnitkb) {
+    public static String uploadFile(MultipartFile file,String fileDirectoryPath,String fileRedirectName,long maxFileSizeUnitkb) {
 
         long maxFileSizeByte = maxFileSizeUnitkb  * 1024;
         if(file.getSize() > maxFileSizeByte){
@@ -54,7 +60,7 @@ public class FileUpLoadTool {
                 String fileType = names[names.length-1];
                 String imageName = getRandomImageName()+"."+fileType;
                 file.transferTo(new File(fileDirectoryPath + imageName));
-                return imageName;
+                return fileRedirectName+"/"+imageName;
             }else{
                 throw new ServiceException(i18nResource.getValue("bad_filename"));
             }
@@ -65,7 +71,7 @@ public class FileUpLoadTool {
     }
 
     public static void deleteFile(String imageName) {
-        String directory = getDefalutUploadImagesDirectory();
+        String directory = getDefalutUploadFilesDirectory();
         deleteFileByPath(directory+imageName);
     }
 
@@ -89,7 +95,7 @@ public class FileUpLoadTool {
         }
     }
 
-    private static String getDefalutUploadImagesDirectory(){
+    public static String getDefalutUploadFilesDirectory(){
         String currentDirectory = null;
         try {
             //得到当前目录
