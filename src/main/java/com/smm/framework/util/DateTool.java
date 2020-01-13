@@ -26,7 +26,7 @@ public class DateTool {
      * 获取当天的开始时间
      * @return
      */
-    public static Date getToDayStartTime() {
+    public static Date getTodayStartTime() {
         Calendar cal = new GregorianCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
@@ -39,7 +39,7 @@ public class DateTool {
      * 获取当天的结束时间
      * @return
      */
-    public static Date getToDayEndTime() {
+    public static Date getTodayEndTime() {
         Calendar cal = new GregorianCalendar();
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
@@ -53,7 +53,7 @@ public class DateTool {
      */
     public static Date getYesterdayStartTime() {
         Calendar cal = new GregorianCalendar();
-        cal.setTime(getToDayStartTime());
+        cal.setTime(getTodayStartTime());
         cal.add(Calendar.DAY_OF_MONTH, -1);
         return cal.getTime();
     }
@@ -64,7 +64,7 @@ public class DateTool {
      */
     public static Date getYesterdayEndTime() {
         Calendar cal = new GregorianCalendar();
-        cal.setTime(getToDayEndTime());
+        cal.setTime(getTodayEndTime());
         cal.add(Calendar.DAY_OF_MONTH, -1);
         return cal.getTime();
     }
@@ -75,7 +75,7 @@ public class DateTool {
      */
     public static Date getTomorrowStartTime() {
         Calendar cal = new GregorianCalendar();
-        cal.setTime(getToDayStartTime());
+        cal.setTime(getTodayStartTime());
         cal.add(Calendar.DAY_OF_MONTH, 1);
         return cal.getTime();
     }
@@ -86,7 +86,7 @@ public class DateTool {
      */
     public static Date getTomorrowEndTime() {
         Calendar cal = new GregorianCalendar();
-        cal.setTime(getToDayEndTime());
+        cal.setTime(getTodayEndTime());
         cal.add(Calendar.DAY_OF_MONTH, 1);
         return cal.getTime();
     }
