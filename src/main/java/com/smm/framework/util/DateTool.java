@@ -10,6 +10,8 @@ import java.util.*;
  */
 public class DateTool {
 
+    private final static int DECEMBER =12;
+
     /**
      * 获取日期格式化内容
      * @param date
@@ -394,11 +396,11 @@ public class DateTool {
             }
         } else {
             {
-                for (int j = beginMonth; j < 12; j++) {
+                for (int j = beginMonth; j < DECEMBER; j++) {
                     list.add(getTimeList(beginYear, j, k));
                 }
                 for (int i = beginYear + 1; i < endYear; i++) {
-                    for (int j = 0; j < 12; j++) {
+                    for (int j = 0; j < DECEMBER; j++) {
                         list.add(getTimeList(i, j, k));
                     }
                 }

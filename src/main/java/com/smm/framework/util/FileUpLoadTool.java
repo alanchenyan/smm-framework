@@ -23,7 +23,7 @@ public class FileUpLoadTool {
 
     public static final String FILE_REDIRECT_NAME = "files";
 
-    private static final I18nResource i18nResource = I18nResourceFactory.getI18nResource();
+    private static final I18nResource I18NRESOURCE = I18nResourceFactory.getI18nResource();
 
     public static String uploadFile(MultipartFile file) {
         String directory = getDefalutUploadFilesDirectory();
@@ -49,7 +49,7 @@ public class FileUpLoadTool {
 
         long maxFileSizeByte = maxFileSizeUnitkb  * 1024;
         if(file.getSize() > maxFileSizeByte){
-            String tips = i18nResource.getValue("max_upload_file_size_01")  + maxFileSizeUnitkb + i18nResource.getValue("max_upload_file_size_02");
+            String tips = I18NRESOURCE.getValue("max_upload_file_size_01")  + maxFileSizeUnitkb + I18NRESOURCE.getValue("max_upload_file_size_02");
             throw new ServiceException(tips);
         }
 
@@ -62,11 +62,11 @@ public class FileUpLoadTool {
                 file.transferTo(new File(fileDirectoryPath + imageName));
                 return fileRedirectName+"/"+imageName;
             }else{
-                throw new ServiceException(i18nResource.getValue("bad_filename"));
+                throw new ServiceException(I18NRESOURCE.getValue("bad_filename"));
             }
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ServiceException(i18nResource.getValue("file_upload_failed"));
+            throw new ServiceException(I18NRESOURCE.getValue("file_upload_failed"));
         }
     }
 
@@ -102,7 +102,7 @@ public class FileUpLoadTool {
             currentDirectory = new File(".").getCanonicalPath();
         } catch (IOException e) {
             e.printStackTrace();
-            throw new ServiceException(i18nResource.getValue("file_upload_failed"));
+            throw new ServiceException(I18NRESOURCE.getValue("file_upload_failed"));
         }
         String directory = currentDirectory +DEFALUT_UPLOAD_FILE_DIRECTORY;
 

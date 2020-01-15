@@ -1,5 +1,7 @@
 package com.smm.framework.config;
 
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.smm.framework.response.ResponseResult;
 import org.springframework.context.annotation.Configuration;
@@ -60,6 +62,11 @@ public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcC
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new FastJsonHttpMessageConverter());
+        FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        // 字段为null时依然返回到前端，而不是省略该字段
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue);
+        converter.setFastJsonConfig(fastJsonConfig);
+        converters.add(converter);
     }
 }
