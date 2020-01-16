@@ -344,10 +344,10 @@ public class DateTool {
      * @return
      */
     public static Date getFirstSeasonDate(Date date) {
-        final int[] SEASON = {1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4};
+        final int[] season = {1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4};
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
-        int sean = SEASON[cal.get(Calendar.MONTH)];
+        int sean = season[cal.get(Calendar.MONTH)];
         cal.set(Calendar.MONTH, sean * 3 - 3);
         return cal.getTime();
     }
