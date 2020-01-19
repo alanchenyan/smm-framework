@@ -73,6 +73,44 @@ public class MybatisPlusConfig extends GlobalMybatisConfig {
 
 }
 ```
+数据表的创建时间、修改时间会自动填充当前的系统时间，如果你的数据表有记录操作人和修改人，需要在请求的header里传入userId参数，smm框架会自动在数据表中记录操作人、修改人。注意，要写FieldFill.INSERT和INSERT_UPDATE注解，如下：
+```
+@Data
+public class BaseEntity {
+
+    @ApiModelProperty("ID（后台自动插入）")
+    @TableId(type = IdType.UUID)
+    private String id;
+
+    @JsonIgnore
+    @ApiModelProperty("创建人ID（后台自动插入）")
+    @TableField(fill = FieldFill.INSERT)
+    private String createUserId;
+
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
+    @ApiModelProperty("数据创建时间（后台自动生成）")
+    @TableField(fill = FieldFill.INSERT)
+    private Date createTime;
+
+    @JsonIgnore
+    @ApiModelProperty("修改人ID（后台自动插入）")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String updateUserId;
+
+    @JSONField(serialize = false)
+    @JsonIgnore
+    @ApiModelProperty("数据修改时间（后台自动生成）")
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private Date updateTime;
+
+    @JsonIgnore
+    @JSONField(serialize = false)
+    @ApiModelProperty("逻辑删除标志 0:未删除；1：已删除（后台自动插入）")
+    @TableLogic
+    private Integer deleted;
+}
+
+```
 
 #### 2.4 Swagger文档配置
 继承GloablSwaggerConfig
