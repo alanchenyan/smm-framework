@@ -259,7 +259,21 @@ public IPage<UserAgentVO> pageUserAgents(UserAgentSearch search) {
 
 #### 2.7 国际化
 
-##### 2.7.1 国际化
+##### 2.7.1 服务器返回到客户端消息/异常的国际化
+第一步：继承GlobalExceptionHandler类，重写enableResponseMessageI18n方法
+```
+@ControllerAdvice
+@Component
+public class ExceptionHandler extends GlobalExceptionHandler {
+    @Override
+    protected boolean enableResponseMessageI18n() {
+        return true;
+    }
+}
+```
+第二步：在resources/i18n/ 目录下新建Resource Bundel,名字为：messages，如下图：
+![国际化配置文件](https://upload-images.jianshu.io/upload_images/9571610-effedba324b00960.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
 
 
 
