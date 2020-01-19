@@ -274,6 +274,7 @@ public class ExceptionHandler extends GlobalExceptionHandler {
 第二步：在resources/i18n/ 目录下新建Resource Bundel,名字为：messages，如下图：
 https://upload-images.jianshu.io/upload_images/9571610-effedba324b00960.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240
 
+![avatar](https://upload-images.jianshu.io/upload_images/9571610-effedba324b00960.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 
 
