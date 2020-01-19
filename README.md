@@ -288,6 +288,18 @@ password_error=您的登录密码错误
     }
 ```
 
+第四步：如果要自定义国际化文件的路径，可以继承GlobalExceptionHandler类，重写responseMessageI18nSourcePath方法
+```
+@ControllerAdvice
+@Component
+public class ExceptionHandler extends GlobalExceptionHandler {
+    @Override
+    protected String responseMessageI18nSourcePath(){
+        return "i18n/messages";
+    }
+}
+```
+
 ##### 2.7.2 hibernate-validator 校验提示信息的国际化
 
 第一步：继承GlobalExceptionHandler类，重写enableValidationI18n方法
@@ -326,6 +338,17 @@ public class UserRegistVO {
 }
 ```
 
+第四步：如果要自定义国际化文件的路径，可以继承GlobalExceptionHandler类，重写validationI18nSourcePath方法
+```
+@ControllerAdvice
+@Component
+public class ExceptionHandler extends GlobalExceptionHandler {
+    @Override
+    protected String validationI18nSourcePath(){
+        return "i18n/validation";
+    }
+}
+```
 
 
 
