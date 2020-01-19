@@ -44,7 +44,7 @@ smm-framework-parent是smm框架父级依赖，smm-framework-parent已经将所�
 
 #### 二、功能使用说明
 
-##### 2.1 跨域请求配置
+#### 2.1 跨域请求配置
 继承GlobalCorsConfig
 ```
 @Configuration
@@ -55,7 +55,7 @@ public class CorsConfig extends GlobalCorsConfig {
 ```
 
 
-##### 2.2 全局异常处理
+#### 2.2 全局异常处理
 继承GlobalExceptionHandler
 ```
 @ControllerAdvice
@@ -65,7 +65,7 @@ public class ExceptionHandler extends GlobalExceptionHandler {
 }
 ```
 
-##### 2.3 mybatis plus配置
+#### 2.3 mybatis plus配置
 继承GlobalMybatisConfig
 ```
 @Configuration
@@ -74,7 +74,7 @@ public class MybatisPlusConfig extends GlobalMybatisConfig {
 }
 ```
 
-##### 2.4 Swagger文档配置
+#### 2.4 Swagger文档配置
 继承GloablSwaggerConfig
 ```
 @Configuration
@@ -121,9 +121,9 @@ protected List<SwaggerApiInfo> configureSwaggerApiInfo() {
 暂时最多支持配置10个Docket，正常情况下10个已经足够了，如果需要，smm框架还能提供更多的配置数量。
 
 
-##### 2.5 接口权限控制JWT Token配置
+#### 2.5 接口权限控制JWT Token配置
 
-###### 2.5.1 实现接口UserDetailsService,重写loadUserByUsername()方法，查询数据库返回UserDetails
+##### 2.5.1 实现接口UserDetailsService,重写loadUserByUsername()方法，查询数据库返回UserDetails
 
 密码加密方式默认用的是BCryptPasswordEncoder
 ```
@@ -145,7 +145,7 @@ public class UserDetailServiceImpl implements UserDetailsService {
 }
 ```
 
-###### 2.5.2 继承GlobalWebSecurityConfigurer
+##### 2.5.2 继承GlobalWebSecurityConfigurer
 ```
 @Configuration
 @Order(SecurityProperties.BASIC_AUTH_ORDER)
@@ -154,7 +154,7 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
 }
 ```
 
-###### 2.5.3 指定某种环境下关闭接口权限校验
+##### 2.5.3 指定某种环境下关闭接口权限校验
 为了方便开发，一般我们在本地开发环境中会关闭接口权限校验，因为我们提供了一个customCloseAuthorityEvironment()方法，你可以指定某种环境下关闭接口权限校验，如下：
 ```
 @Configuration
@@ -175,10 +175,10 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
 }
 ```
 
-###### 2.5.4 JWT Token signingKey
+##### 2.5.4 JWT Token signingKey
 重写String signingKey()方法，返回你的私钥
 
-###### 2.5.5 设置Token过期时间
+##### 2.5.5 设置Token过期时间
 重写long expirationTime()方法,如：
 ```
     protected long expirationTime(){
@@ -186,16 +186,16 @@ public class WebSecurityConfigurer extends GlobalWebSecurityConfigurer {
     }
 ```
 
-###### 2.5.6 自定义放行接口
+##### 2.5.6 自定义放行接口
 如果你需要指定某些接口要放行，你可以重写customConfigure(HttpSecurity http)，通过HttpSecurity设置放行接口，然后返回设置后的HttpSecurity
 
-###### 2.5.7 登录用RSA非对称性加密对用户名、密码进行加密安全传输
+##### 2.5.7 登录用RSA非对称性加密对用户名、密码进行加密安全传输
  重写 GlobalWebSecurityConfigurer类的protected String loginEncryptRsaPrivateKey()方法，配置你的RSA私钥。同时前端也需要配合用对应的RSA公钥对用户名、密码进行加密。
 详情可参考：[用非对称性加密保障Web登录安全](https://www.jianshu.com/p/0fe3a7ae2256)
 
-##### 2.6 Restful API 返回统一的数据格式到前端
+#### 2.6 Restful API 返回统一的数据格式到前端
 
-###### 2.6.1 smm框架中，统一返回到前端的格式是ResponseResult
+##### 2.6.1 smm框架中，统一返回到前端的格式是ResponseResult
 ```
 public class ResponseResult {
     private int code;
@@ -204,10 +204,10 @@ public class ResponseResult {
 }
 ```
 
-###### 2.6.2 server端的异常也会被全局拦截，统一返回ResponseResult格式
+##### 2.6.2 server端的异常也会被全局拦截，统一返回ResponseResult格式
 参见2.2
 
-###### 2.6.3 全局拦截Controller层API，对所有返回值统一包装成ResponseResult格式再返回到前端
+##### 2.6.3 全局拦截Controller层API，对所有返回值统一包装成ResponseResult格式再返回到前端
 继承GlobalReturnConfig
 ```
 @EnableWebMvc
@@ -259,7 +259,7 @@ public IPage<UserAgentVO> pageUserAgents(UserAgentSearch search) {
 
 #### 2.7 国际化
 
-#### 2.7.1 国际化
+##### 2.7.1 国际化
 
 
 
