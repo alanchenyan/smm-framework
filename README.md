@@ -271,10 +271,60 @@ public class ExceptionHandler extends GlobalExceptionHandler {
     }
 }
 ```
-第二步：在resources/i18n/ 目录下新建Resource Bundel,名字为：messages，如下图：
-https://upload-images.jianshu.io/upload_images/9571610-effedba324b00960.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240
+第二步：在resources/i18n/ 目录下新建Resource Bundel,名字为：messages。配置键值对，如
+```
+not_fund_data=数据不存在
+password_error=您的登录密码错误
+```
 
-![avatar](https://upload-images.jianshu.io/upload_images/9571610-effedba324b00960.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+第三步：使用国际化，如
+```
+    public User getUser(String id) {
+        User user = userDao.selectById(id);
+        if(user == null){
+            throw new ServiceException("not_fund_data");
+        }
+        return user;
+    }
+```
+
+##### 2.7.2 hibernate-validator 校验提示信息的国际化
+
+第一步：继承GlobalExceptionHandler类，重写enableValidationI18n方法
+```
+@ControllerAdvice
+@Component
+public class ExceptionHandler extends GlobalExceptionHandler {
+
+    @Override
+    protected boolean enableValidationI18n() {
+        return true;
+    }
+}
+```
+
+第二步：在resources/i18n/ 目录下新建Resource Bundel,名字为：validation。配置键值对，如
+```
+app_user_inputphone=请您输入手机号码
+app_user_input_areacode=请您选择区号
+```
+
+第三步：使用国际化
+```
+@Data
+public class UserRegistVO {
+
+    @NotBlank(message = "app_user_input_areacode")
+    @ApiModelProperty("区号")
+    private String areaCode;
+
+    @NotBlank(message = "app_user_input_phone")
+    @ApiModelProperty("手机号")
+    private String phone;
+    
+     ......
+}
+```
 
 
 
