@@ -30,6 +30,11 @@ public class FileUpLoadTool {
         return uploadFile(file,directory);
     }
 
+    public static String uploadFile(MultipartFile file,long maxFileSizeUnitkb) {
+        String directory = getDefalutUploadFilesDirectory();
+        return uploadFile(file,directory,FILE_REDIRECT_NAME,maxFileSizeUnitkb);
+    }
+
     public static String uploadFile(MultipartFile file,String fileDirectoryPath) {
         return uploadFile(file,fileDirectoryPath,FILE_REDIRECT_NAME,DEFAULT_MAX_SIZE_UNIT_KB);
     }

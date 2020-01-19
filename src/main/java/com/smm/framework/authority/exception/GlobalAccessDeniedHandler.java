@@ -26,15 +26,15 @@ public class GlobalAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AccessDeniedException e)  {
-        responseException(httpServletResponse,e);
+        responseException(httpServletRequest,httpServletResponse,e);
     }
 
-    private void responseException(HttpServletResponse response,AccessDeniedException exception) {
+    private void responseException(HttpServletRequest httpServletRequest,HttpServletResponse response,AccessDeniedException exception) {
 
         Map<String,Object> exceptionMap = new HashMap(3);
 
         exceptionMap.put("code",403);
-        exceptionMap.put("msg", i18nResource.getValue("no_access"));
+        exceptionMap.put("msg", i18nResource.getValue("no_access",httpServletRequest));
         exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);

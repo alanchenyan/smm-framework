@@ -33,12 +33,12 @@ public class I18nResource {
         resourceBundleMessageSource.setBasename(path);
     }
 
-    public String getValue(String key) {
+    public String getValue(String key,HttpServletRequest request) {
         String value = "";
         try {
-            HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                    .getRequestAttributes()).getRequest();
-
+            if(request == null){
+                return value;
+            }
             String lang = request.getHeader("Content-Language");
             Locale customerLocale;
             if (StringUtils.isEmpty(lang)) {
@@ -60,6 +60,14 @@ public class I18nResource {
             value = getValue(key, defaultLocale());
         }
         return value;
+    }
+
+    public String getValue(String key) {
+
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
+                .getRequestAttributes()).getRequest();
+
+        return getValue(key,request);
     }
 
     public String getValue(String keyValue, Locale locale) {

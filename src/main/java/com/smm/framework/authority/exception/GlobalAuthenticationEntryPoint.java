@@ -26,15 +26,15 @@ public class GlobalAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e)  {
-        responseException(httpServletResponse,e);
+        responseException(httpServletRequest,httpServletResponse,e);
     }
 
-    private void responseException(HttpServletResponse response,AuthenticationException exception) {
+    private void responseException(HttpServletRequest httpServletRequest,HttpServletResponse response,AuthenticationException exception) {
 
         Map<String,Object> exceptionMap = new HashMap(3);
 
         exceptionMap.put("code",403);
-        exceptionMap.put("msg", i18nResource.getValue("authentication_failed"));
+        exceptionMap.put("msg", i18nResource.getValue("authentication_failed",httpServletRequest));
         exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);
