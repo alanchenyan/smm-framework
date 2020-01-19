@@ -350,6 +350,37 @@ public class ExceptionHandler extends GlobalExceptionHandler {
 }
 ```
 
+#### 2.8 文件上传功能（图片/pdf等任意文件类型）
+第一步：上传文件
+调用FileUpLoadTool工具类的相关方法，如
+```
+public String uploadFile(MultipartFile file) {
+      return FileUpLoadTool.uploadFile(file);
+}
+```
+FileUpLoadTool工具类上传的文件默认存储在当前项目的uploadfiles目录，如果没有该目录，则会自动创建该目录。当然也可以自定义存储目录，可以指定的存储目录传给uploadFile方法，如
+```
+public String uploadFile(MultipartFile file) {
+      return FileUpLoadTool.uploadFile(file,"/data/images/");
+}
+```
+同时还可以设置限制上传文件大小的参数，参考uploadFile的其他重构方法。
+
+第二步：配置访问文件映射
+```
+@Configuration
+@EnableWebMvc
+public class UploadFileConfig extends GlobalUploadFileConfig {
+}
+
+```
+
+第三步：访问上传的文件
+文件上传后，uploadFile方法会返回文件的存储名字，且会加上默认的访问前缀是files，访问文件（或图片）的方式为：
+服务器地址+files+图片名称，如下：
+```
+http://127.0.0.01:8080/files/34334EFfe1323.png
+```
 
 
  
