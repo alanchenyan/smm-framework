@@ -38,6 +38,15 @@ public class DateTool {
     }
 
     /**
+     * 获取当天的开始时间
+     * @return
+     */
+    public static String getTodayStartTimeFormat() {
+        Date date = getTodayStartTime();
+        return getFormatDate(date);
+    }
+
+    /**
      * 获取当天的结束时间
      * @return
      */
@@ -47,6 +56,15 @@ public class DateTool {
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
         return cal.getTime();
+    }
+
+    /**
+     * 获取当天的结束时间
+     * @return
+     */
+    public static String getTodayEndTimeFormat() {
+        Date date = getTodayEndTime();
+        return getFormatDate(date);
     }
 
     /**
