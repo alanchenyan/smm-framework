@@ -18,10 +18,31 @@ public class DateTool {
      * @return
      */
     public static String getFormatDate(Date date) {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formatDate = format.format(date.getTime());
+        return getFormatDate(date,"yyyy-MM-dd HH:mm:ss");
+    }
 
+    /**
+     * 获取日期格式化内容
+     * @param date
+     * @param pattern
+     * @return
+     */
+    public static String getFormatDate(Date date,String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        String formatDate = format.format(date.getTime());
         return formatDate;
+    }
+
+    /**
+     * 当前时间往前/往后n小时
+     * @param hour 往后：参数传正；往前：参数传负数
+     * @return
+     */
+    public static Date dateRoll(int hour) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.HOUR, hour);
+        return calendar.getTime();
     }
 
     /**
