@@ -34,14 +34,26 @@ public class DateTool {
     }
 
     /**
-     * 当前时间往前/往后n小时
+     * 获取当前时间往前/往后n小时的时间
      * @param hour 往后：参数传正；往前：参数传负数
      * @return
      */
-    public static Date dateRoll(int hour) {
+    public static Date dateRollHour(int hour) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         calendar.add(Calendar.HOUR, hour);
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取当前时间往前/往后n分钟的时间
+     * @param minute 往后：参数传正；往前：参数传负数
+     * @return
+     */
+    public static Date dateRollMinute(int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MINUTE, minute);
         return calendar.getTime();
     }
 
