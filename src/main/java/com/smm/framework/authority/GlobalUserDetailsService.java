@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 public class GlobalUserDetailsService implements UserDetailsService {
 
     @Autowired
-    HttpServletRequest request;
+    public HttpServletRequest request;
 
     @Bean
     public RequestContextListener requestContextListener(){
