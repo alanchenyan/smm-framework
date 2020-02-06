@@ -7,7 +7,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * @author Alan Chen
- * @description
+ * @description 枚举类型转换配置
  * @date 2020-02-06
  */
 @Configuration
