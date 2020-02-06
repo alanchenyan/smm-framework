@@ -30,11 +30,11 @@ public class EnumConvertFactory implements ConverterFactory<String, IEnum> {
             if (StringUtils.isEmpty(source)) {
                 return null;
             }
-            return (T) EnumConvertFactory.getIEnum(this.targerType, source);
+            return (T) EnumConvertFactory.getIenum(this.targerType, source);
         }
     }
 
-    public static <T extends IEnum> Object getIEnum(Class<T> targerType, String source) {
+    public static <T extends IEnum> Object getIenum(Class<T> targerType, String source) {
         for (T enumObj : targerType.getEnumConstants()) {
             if (source.equals(String.valueOf(enumObj.getValue()))) {
                 return enumObj;

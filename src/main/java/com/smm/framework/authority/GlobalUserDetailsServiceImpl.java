@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
  * @description 校验账号
  * @date 2020-02-05
  */
-public class GlobalUserDetailsService implements UserDetailsService {
+public class GlobalUserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
     public HttpServletRequest request;
