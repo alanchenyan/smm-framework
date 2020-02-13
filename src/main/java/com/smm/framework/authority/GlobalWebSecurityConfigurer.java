@@ -80,7 +80,7 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         super.configure(web);
-        web.ignoring().antMatchers("/config/**", "/css/**", "/fonts/**", "/img/**", "/js/**");
+        web.ignoring().antMatchers("/config/**", "/css/**", "/fonts/**", "/img/**","/image/**","/images/**","/static/**", "/js/**");
 
         //swagger-ui start
         web.ignoring().antMatchers("/v2/api-docs/**");
