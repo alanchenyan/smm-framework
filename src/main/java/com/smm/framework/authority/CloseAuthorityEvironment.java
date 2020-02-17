@@ -1,6 +1,5 @@
 package com.smm.framework.authority;
 
-import lombok.Data;
 
 /**
  * @author Alan Chen
@@ -13,14 +12,14 @@ public class CloseAuthorityEvironment {
         super();
     }
 
-    public CloseAuthorityEvironment(String currentRunEnvironment, String closeAuthEnvironment) {
+    public CloseAuthorityEvironment(String currentRunEnvironment, String... closeAuthEnvironment) {
         this.currentRunEnvironment = currentRunEnvironment;
         this.closeAuthEnvironment = closeAuthEnvironment;
     }
 
     private String currentRunEnvironment;
 
-    private String closeAuthEnvironment;
+    private String[] closeAuthEnvironment;
 
     public String getCurrentRunEnvironment() {
         return currentRunEnvironment;
@@ -30,11 +29,11 @@ public class CloseAuthorityEvironment {
         this.currentRunEnvironment = currentRunEnvironment;
     }
 
-    public String getCloseAuthEnvironment() {
+    public String[] getCloseAuthEnvironment() {
         return closeAuthEnvironment;
     }
 
-    public void setCloseAuthEnvironment(String closeAuthEnvironment) {
+    public void setCloseAuthEnvironment(String[] closeAuthEnvironment) {
         this.closeAuthEnvironment = closeAuthEnvironment;
     }
 }

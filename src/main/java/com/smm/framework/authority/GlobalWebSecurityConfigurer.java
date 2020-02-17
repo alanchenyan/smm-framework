@@ -100,13 +100,21 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        boolean isCloseAuth;
+        boolean isCloseAuth = false;
 
         CloseAuthorityEvironment closeAuthority = customCloseAuthorityEvironment();
         if(closeAuthority ==null || closeAuthority.getCloseAuthEnvironment() == null || closeAuthority.getCurrentRunEnvironment()==null){
             isCloseAuth = false;
         }else{
-            isCloseAuth = closeAuthority.getCloseAuthEnvironment().equals(closeAuthority.getCurrentRunEnvironment());
+            String[] closeAuthEnvironmentArry = closeAuthority.getCloseAuthEnvironment();
+            if(closeAuthEnvironmentArry != null){
+                for(String closeAuthEnvironment : closeAuthEnvironmentArry){
+                    if(closeAuthority.getCloseAuthEnvironment().equals(closeAuthEnvironment)){
+                        isCloseAuth = true;
+                        break;
+                    }
+                }
+            }
         }
 
         if(isCloseAuth){

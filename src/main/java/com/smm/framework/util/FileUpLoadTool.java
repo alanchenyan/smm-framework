@@ -25,6 +25,8 @@ public class FileUpLoadTool {
 
     private static final I18nResource I18NRESOURCE = I18nResourceFactory.getI18nResource();
 
+    private FileUpLoadTool(){}
+
     public static String uploadFile(MultipartFile file) {
         String directory = getDefalutUploadFilesDirectory();
         return uploadFile(file,directory);
