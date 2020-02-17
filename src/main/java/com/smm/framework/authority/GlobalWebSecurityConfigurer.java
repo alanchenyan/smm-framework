@@ -103,13 +103,13 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
         boolean isCloseAuth = false;
 
         CloseAuthorityEvironment closeAuthority = customCloseAuthorityEvironment();
-        if(closeAuthority ==null || closeAuthority.getCloseAuthEnvironment() == null || closeAuthority.getCurrentRunEnvironment()==null){
+        if(closeAuthority ==null || closeAuthority.getCloseAuthEnvironments() == null || closeAuthority.getCurrentRunEnvironment()==null){
             isCloseAuth = false;
         }else{
-            String[] closeAuthEnvironmentArry = closeAuthority.getCloseAuthEnvironment();
+            String[] closeAuthEnvironmentArry = closeAuthority.getCloseAuthEnvironments();
             if(closeAuthEnvironmentArry != null){
                 for(String closeAuthEnvironment : closeAuthEnvironmentArry){
-                    if(closeAuthority.getCloseAuthEnvironment().equals(closeAuthEnvironment)){
+                    if(closeAuthority.getCurrentRunEnvironment().equals(closeAuthEnvironment)){
                         isCloseAuth = true;
                         break;
                     }
