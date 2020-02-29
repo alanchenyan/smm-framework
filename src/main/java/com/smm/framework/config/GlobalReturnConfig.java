@@ -15,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,11 +63,35 @@ public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcC
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        //创建fastJson消息转换器
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
+
+        // 解决Content-Type cannot contain wildcard type '*'问题
+        List<MediaType> supportedMediaTypes = new ArrayList<>();
+        supportedMediaTypes.add(MediaType.APPLICATION_JSON);
+        supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+        supportedMediaTypes.add(MediaType.APPLICATION_ATOM_XML);
+        supportedMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
+        supportedMediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
+        supportedMediaTypes.add(MediaType.APPLICATION_PDF);
+        supportedMediaTypes.add(MediaType.APPLICATION_RSS_XML);
+        supportedMediaTypes.add(MediaType.APPLICATION_XHTML_XML);
+        supportedMediaTypes.add(MediaType.APPLICATION_XML);
+        supportedMediaTypes.add(MediaType.IMAGE_GIF);
+        supportedMediaTypes.add(MediaType.IMAGE_JPEG);
+        supportedMediaTypes.add(MediaType.IMAGE_PNG);
+        supportedMediaTypes.add(MediaType.TEXT_EVENT_STREAM);
+        supportedMediaTypes.add(MediaType.TEXT_HTML);
+        supportedMediaTypes.add(MediaType.TEXT_MARKDOWN);
+        supportedMediaTypes.add(MediaType.TEXT_PLAIN);
+        supportedMediaTypes.add(MediaType.TEXT_XML);
+        converter.setSupportedMediaTypes(supportedMediaTypes);
+
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         // 字段为null时依然返回到前端，而不是省略该字段
         fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue);
         converter.setFastJsonConfig(fastJsonConfig);
+
         converters.add(converter);
     }
 }
