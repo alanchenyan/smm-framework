@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -42,9 +44,16 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
     private long expirationTime;
 
     /**
+     * JWT Token 过期日期
+     */
+    private Date expirationDate;
+
+    /**
      * 登录时用RSA加密的私钥
      */
     private String loginEncryptRsaPrivateKey;
+
+
 
     public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime,String loginEncryptRsaPrivateKey) {
         this.authenticationManager = authenticationManager;
@@ -79,11 +88,26 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
                                             FilterChain chain, Authentication authResult) {
         String token = Jwts.builder()
                 .setSubject(((User) authResult.getPrincipal()).getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() +  expirationTime))
+                //.setExpiration(new Date(System.currentTimeMillis() +  expirationTime))
+                .setExpiration(getExpiration())
                 .signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();
 
         returnToken(response, JwtUtil.getTokenHeader(token));
+    }
+
+    private Date getExpiration(){
+        if(expirationDate!=null){
+            return expirationDate;
+        }
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            expirationDate = simpleDateFormat.parse("3000-01-01");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return expirationDate;
     }
 
     private void returnToken(HttpServletResponse response, String token) {
