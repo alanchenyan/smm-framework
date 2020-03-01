@@ -10,7 +10,7 @@
 
     <groupId>com.smm</groupId>
     <artifactId>smm-framework</artifactId>
-    <version>1.7.7</version>
+    <version>1.7.8</version>
     <name>smm-framework</name>
     <description>smm-framework</description>
 
@@ -20,10 +20,6 @@
             <url>https://jitpack.io</url>
         </repository>
     </repositories>
-
-    <dependencies>
-
-    </dependencies>
 
     <build>
         <plugins>
