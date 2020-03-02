@@ -149,7 +149,7 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private void commonConfigure(HttpSecurity http) throws Exception{
 
-        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),expirationTime(),loginEncryptRsaPrivateKey());
+        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),tokenNeverExpires(),expirationTime(),loginEncryptRsaPrivateKey());
         GlobalBasicAuthenticationFilter basicAuthenticationFilter = new GlobalBasicAuthenticationFilter(authenticationManager(),signingKey());
 
         http.addFilter(usernamePasswordAuthenticationFilter)
