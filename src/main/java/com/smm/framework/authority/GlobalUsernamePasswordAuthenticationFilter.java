@@ -44,6 +44,11 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
     private long expirationTime;
 
     /**
+     * JWT Token有 是否永不过期
+     */
+    private boolean tokenNeverExpires;
+
+    /**
      * JWT Token 过期日期
      */
     private Date expirationDate;
@@ -55,9 +60,10 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
 
 
 
-    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,long expirationTime,String loginEncryptRsaPrivateKey) {
+    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,boolean tokenNeverExpires,long expirationTime,String loginEncryptRsaPrivateKey) {
         this.authenticationManager = authenticationManager;
         this.signingKey = signingKey;
+        this.tokenNeverExpires = tokenNeverExpires;
         this.expirationTime = expirationTime;
         this.loginEncryptRsaPrivateKey = loginEncryptRsaPrivateKey;
     }
@@ -86,12 +92,21 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) {
-        String token = Jwts.builder()
-                .setSubject(((User) authResult.getPrincipal()).getUsername())
-                //.setExpiration(new Date(System.currentTimeMillis() +  expirationTime))
-                .setExpiration(getExpiration())
-                .signWith(SignatureAlgorithm.HS512, signingKey)
-                .compact();
+        String token;
+        if(tokenNeverExpires){
+            token = Jwts.builder()
+                    .setSubject(((User) authResult.getPrincipal()).getUsername())
+                    .setExpiration(getExpiration())
+                    .signWith(SignatureAlgorithm.HS512, signingKey)
+                    .compact();
+        }else{
+             token = Jwts.builder()
+                    .setSubject(((User) authResult.getPrincipal()).getUsername())
+                    .setExpiration(new Date(System.currentTimeMillis() +  expirationTime))
+                    .signWith(SignatureAlgorithm.HS512, signingKey)
+                    .compact();
+        }
+
 
         returnToken(response, JwtUtil.getTokenHeader(token));
     }

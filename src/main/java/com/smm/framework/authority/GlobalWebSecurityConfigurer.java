@@ -46,6 +46,14 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
     }
 
     /**
+     * JWT Token 永不失效
+     * @return
+     */
+    protected boolean tokenNeverExpires(){
+        return false;
+    }
+
+    /**
      * JWT Token有效期时间
      * @return
      */
