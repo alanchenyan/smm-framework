@@ -101,14 +101,57 @@ public class DateTool {
     }
 
     /**
-     * 获取当天的结束时间
+     * 获取amount天前的开始时间
+     * @return
+     */
+    public static Date getBeforeDayStartTime(int amount) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getTodayStartTime());
+        cal.add(Calendar.DAY_OF_MONTH, -amount);
+        return cal.getTime();
+    }
+
+
+    /**
+     * 获取前amount天前的结束时间
+     * @return
+     */
+    public static Date getBeforeDayEndTime(int amount) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getTodayEndTime());
+        cal.add(Calendar.DAY_OF_MONTH, -amount);
+        return cal.getTime();
+    }
+
+    /**
+     * 获取amount天后的开始时间
+     * @return
+     */
+    public static Date getAfterDayStartTime(int amount) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getTodayStartTime());
+        cal.add(Calendar.DAY_OF_MONTH, amount);
+        return cal.getTime();
+    }
+
+
+    /**
+     * 获取前amount天后的结束时间
+     * @return
+     */
+    public static Date getAfterDayEndTime(int amount) {
+        Calendar cal = new GregorianCalendar();
+        cal.setTime(getTodayEndTime());
+        cal.add(Calendar.DAY_OF_MONTH, amount);
+        return cal.getTime();
+    }
+
+    /**
+     * 获取昨天的开始时间
      * @return
      */
     public static Date getYesterdayStartTime() {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(getTodayStartTime());
-        cal.add(Calendar.DAY_OF_MONTH, -1);
-        return cal.getTime();
+        return getBeforeDayStartTime(1);
     }
 
     /**
@@ -116,10 +159,7 @@ public class DateTool {
      * @return
      */
     public static Date getYesterdayEndTime() {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(getTodayEndTime());
-        cal.add(Calendar.DAY_OF_MONTH, -1);
-        return cal.getTime();
+       return getBeforeDayEndTime(1);
     }
 
     /**
@@ -127,10 +167,7 @@ public class DateTool {
      * @return
      */
     public static Date getTomorrowStartTime() {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(getTodayStartTime());
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        return cal.getTime();
+        return getAfterDayStartTime(1);
     }
 
     /**
@@ -138,10 +175,7 @@ public class DateTool {
      * @return
      */
     public static Date getTomorrowEndTime() {
-        Calendar cal = new GregorianCalendar();
-        cal.setTime(getTodayEndTime());
-        cal.add(Calendar.DAY_OF_MONTH, 1);
-        return cal.getTime();
+        return getAfterDayEndTime(1);
     }
 
     /**
