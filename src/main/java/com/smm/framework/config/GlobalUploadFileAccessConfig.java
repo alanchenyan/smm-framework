@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @EnableWebMvc
-public class GlobalUploadFileConfig implements WebMvcConfigurer {
+public class GlobalUploadFileAccessConfig implements WebMvcConfigurer {
 
     protected String fileRedirectName(){
         return FileUpLoadTool.FILE_REDIRECT_NAME;
