@@ -116,6 +116,12 @@ public class GlobalExceptionHandler {
             String messageKey = ex.getMessage();
             try{
                 String message = responseMessageI18nSource.getValue(messageKey);
+                String[] placeholder = ex.getPlaceholder();
+                if(placeholder!=null && placeholder.length>0){
+                   for(int i =0;i<placeholder.length;i++){
+                       message = message.replace("#{"+(i+1)+"}",placeholder[i]);
+                   }
+                }
                 return ResponseResult.info(message);
             }catch (Exception e){
                 return ResponseResult.info(ex.getMessage());
