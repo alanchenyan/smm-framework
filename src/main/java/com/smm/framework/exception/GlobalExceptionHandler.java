@@ -68,6 +68,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseResult errorHandler(Exception ex) {
         ex.printStackTrace();
+        log.error("Exception:"+ex.getMessage());
         return ResponseResult.fail(ex.getMessage());
     }
 
@@ -92,6 +93,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseResult validationHandler(MethodArgumentNotValidException exception) {
         exception.printStackTrace();
+        log.error("MethodArgumentNotValidException:"+exception.getMessage());
         return doValidationException(exception.getBindingResult());
     }
 
@@ -105,6 +107,7 @@ public class GlobalExceptionHandler {
     public ResponseResult commonExceptionHandler(ServiceException ex) {
 
         ex.printStackTrace();
+        log.error("ServiceException:"+ex.getMessage());
 
         if(enableResponseMessageI18n()){
             if(responseMessageI18nSource == null){
@@ -145,7 +148,9 @@ public class GlobalExceptionHandler {
                 stringBuffer.append(error.getDefaultMessage()).append(";");
             }
         }
-        return ResponseResult.fail(stringBuffer.toString());
+
+        log.error("BindException:"+stringBuffer.toString());
+        return ResponseResult.info(stringBuffer.toString());
     }
 
 }
