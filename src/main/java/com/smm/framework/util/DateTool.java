@@ -22,6 +22,15 @@ public class DateTool {
     }
 
     /**
+     * 获取指定日期是星期几
+     * @param date
+     * @return
+     */
+    public static String getDateWeekDay(Date date) {
+        return getFormatDate(date,"EEEE");
+    }
+
+    /**
      * 获取日期格式化内容
      * @param date
      * @param pattern
