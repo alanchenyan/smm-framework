@@ -1,16 +1,13 @@
 package com.smm.framework;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import com.smm.framework.util.DateTool;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+
 public class FrameworkApplicationTests {
 
-    @Test
-    public void contextLoads() {
+    public static void main(String[] args){
+        System.out.println(DateTool.getDate("2012-12-12 12:00:00"));
     }
+
 
 }

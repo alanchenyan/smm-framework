@@ -1,5 +1,6 @@
 package com.smm.framework.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -11,6 +12,21 @@ import java.util.*;
 public class DateTool {
 
     private final static int DECEMBER =12;
+    
+    public static Date getDate(String date){
+        return getDate(date,"yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static Date getDate(String date,String pattern){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date parse = null;
+        try {
+            parse = simpleDateFormat.parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return parse;
+    }
 
     /**
      * 获取日期格式化内容
