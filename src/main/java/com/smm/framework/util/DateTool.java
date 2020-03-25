@@ -43,7 +43,16 @@ public class DateTool {
      * @return
      */
     public static String getDateWeekDay(Date date) {
-        return getFormatDate(date,"EEEE");
+        return getDateWeekDay(date,Locale.CHINESE);
+    }
+
+    /**
+     * 获取指定日期是星期几
+     * @param date
+     * @return
+     */
+    public static String getDateWeekDay(Date date,Locale locale) {
+        return getFormatDate(date,"EEEE",locale);
     }
 
     /**
@@ -53,7 +62,19 @@ public class DateTool {
      * @return
      */
     public static String getFormatDate(Date date,String pattern) {
-        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        SimpleDateFormat format = new SimpleDateFormat(pattern,Locale.CHINESE);
+        String formatDate = format.format(date.getTime());
+        return formatDate;
+    }
+
+    /**
+     * 获取日期格式化内容
+     * @param date
+     * @param pattern
+     * @return
+     */
+    public static String getFormatDate(Date date,String pattern,Locale locale) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern,locale);
         String formatDate = format.format(date.getTime());
         return formatDate;
     }
