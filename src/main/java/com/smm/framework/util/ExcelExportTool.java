@@ -31,6 +31,7 @@ public class ExcelExportTool {
         ExcelWriter writer = ExcelUtil.getWriter();
 
         writer.setHeaderAlias(headerAlias);
+        writer.setOnlyAlias(true);
         writer.write(datas, true);
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         String name = createExcelName();
