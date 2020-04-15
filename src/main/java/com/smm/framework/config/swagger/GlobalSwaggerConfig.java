@@ -13,6 +13,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,126 +25,143 @@ import java.util.List;
 @EnableSwagger2
 public class GlobalSwaggerConfig implements WebMvcConfigurer {
 
-
-    private final int DOCKET_MAX_SIZE =10;
+    private final int DOCKET_MAX_SIZE = 10;
 
     private List<Docket> docketList;
 
-    /**
-     * 是否开启Swagger
-     * @return
-     */
-    public boolean swaggerEnable(){
+    private static List<SwaggerApiInfo> swaggerApiInfosPro = new ArrayList();
+
+    public static void addSwaggerApiInfos(SwaggerApiInfo swaggerApiInfo) {
+
+        swaggerApiInfosPro.add(swaggerApiInfo);
+    }
+
+    public GlobalSwaggerConfig() {
+
+    }
+
+
+    public boolean swaggerEnable() {
+
         return true;
     }
 
-    /**
-     * 有时候API会分为多个模块，因此需要对API进行分组显示，此时可以重写configureSwaggerApiInfo（）方法，返回多个你需要的ApiInfo
-     * @return
-     */
-    protected List<SwaggerApiInfo> configureSwaggerApiInfo(){
-        List<SwaggerApiInfo> swaggerApiInfos = new ArrayList<>();
-        SwaggerApiInfo swaggerApiInfo = new SwaggerApiInfo("API接口文档","","V1.0");
+    protected List<SwaggerApiInfo> configureSwaggerApiInfo() {
+
+        List<SwaggerApiInfo> swaggerApiInfos = new ArrayList();
+        SwaggerApiInfo swaggerApiInfo = new SwaggerApiInfo("API接口文档", "default", "V1.0");
         swaggerApiInfos.add(swaggerApiInfo);
         return swaggerApiInfos;
     }
 
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+
         registry.addResourceHandler(new String[]{"/**"}).addResourceLocations(new String[]{"classpath:/static/"});
         registry.addResourceHandler(new String[]{"swagger-ui.html"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/"});
         registry.addResourceHandler(new String[]{"/webjars/**"}).addResourceLocations(new String[]{"classpath:/META-INF/resources/webjars/"});
     }
 
-    private void initDockets(){
+    private void initDockets() {
 
-        docketList = new ArrayList<>(DOCKET_MAX_SIZE);
+        this.docketList = new ArrayList(DOCKET_MAX_SIZE);
 
-        List<SwaggerApiInfo> swaggerApiInfoList = configureSwaggerApiInfo();
+        List<SwaggerApiInfo> swaggerApiInfos = this.configureSwaggerApiInfo();
+        swaggerApiInfos.addAll(swaggerApiInfosPro);
 
-        if(swaggerApiInfoList.size()>DOCKET_MAX_SIZE){
-            throw new RuntimeException("smm框架Swagger最多只支持配置"+DOCKET_MAX_SIZE+"个Docket");
-        }
-
-        initConfigureDockets(swaggerApiInfoList);
-
-        initDisableDockets(swaggerApiInfoList.size());
-    }
-
-    private void initDisableDockets(int configureDocketsSize){
-        for(int i=configureDocketsSize-1;i<DOCKET_MAX_SIZE;i++){
-            Docket disableDocket= (new Docket(DocumentationType.SWAGGER_2)).groupName(i+"").enable(false);
-            docketList.add(disableDocket);
+        List<SwaggerApiInfo> swaggerApiInfoList = swaggerApiInfos;
+        if (swaggerApiInfoList.size() > DOCKET_MAX_SIZE) {
+            throw new RuntimeException("smm框架Swagger最多只支持配置10个Docket");
+        } else {
+            this.initConfigureDockets(swaggerApiInfoList);
+            this.initDisableDockets(swaggerApiInfoList.size());
         }
     }
 
+    private void initDisableDockets(int configureDocketsSize) {
 
+        for (int i = configureDocketsSize - 1; i < DOCKET_MAX_SIZE; ++i) {
+            Docket disableDocket = (new Docket(DocumentationType.SWAGGER_2)).groupName(i + "").enable(false);
+            this.docketList.add(disableDocket);
+        }
 
-    private void initConfigureDockets(List<SwaggerApiInfo> swaggerApiInfoList){
-        for(SwaggerApiInfo swaggerApiInfo : swaggerApiInfoList){
+    }
 
+    private void initConfigureDockets(List<SwaggerApiInfo> swaggerApiInfoList) {
+
+        Iterator var2 = swaggerApiInfoList.iterator();
+
+        while (var2.hasNext()) {
+            SwaggerApiInfo swaggerApiInfo = (SwaggerApiInfo) var2.next();
             ApiInfo apiInfo = (new ApiInfoBuilder()).title(swaggerApiInfo.getGroupName()).description("").termsOfServiceUrl("").version(swaggerApiInfo.getVersion()).build();
-
-            Docket docket = (new Docket(DocumentationType.SWAGGER_2)).groupName(swaggerApiInfo.getGroupName()).enable(swaggerEnable()).apiInfo(apiInfo).select()
-                    .apis(RequestHandlerSelectors.basePackage(swaggerApiInfo.getBasePackage())).paths(PathSelectors.any()).build();
-
-            docketList.add(docket);
+            Docket docket = (new Docket(DocumentationType.SWAGGER_2)).groupName(swaggerApiInfo.getGroupName()).enable(this.swaggerEnable()).apiInfo(apiInfo).select().apis(RequestHandlerSelectors.basePackage(swaggerApiInfo.getBasePackage())).paths(PathSelectors.any()).build();
+            this.docketList.add(docket);
         }
-    }
 
+    }
 
     @Bean
     public Docket createRestApiZero() {
-        if(docketList == null){
-            initDockets();
+
+        if (this.docketList == null) {
+            this.initDockets();
         }
-        return docketList.get(0);
+
+        return (Docket) this.docketList.get(0);
     }
 
     @Bean
     public Docket createRestApiOne() {
-        return docketList.get(1);
+
+        return (Docket) this.docketList.get(1);
     }
 
     @Bean
     public Docket createRestApiTwo() {
-        return docketList.get(2);
+
+        return (Docket) this.docketList.get(2);
     }
 
     @Bean
     public Docket createRestApiThree() {
-        return docketList.get(3);
+
+        return (Docket) this.docketList.get(3);
     }
 
     @Bean
     public Docket createRestApiFour() {
-        return docketList.get(4);
+
+        return (Docket) this.docketList.get(4);
     }
 
     @Bean
     public Docket createRestApiFive() {
-        return docketList.get(5);
+
+        return (Docket) this.docketList.get(5);
     }
 
     @Bean
     public Docket createRestApiSix() {
-        return docketList.get(6);
+
+        return (Docket) this.docketList.get(6);
     }
 
     @Bean
     public Docket createRestApiSeven() {
-        return docketList.get(7);
+
+        return (Docket) this.docketList.get(7);
     }
 
     @Bean
     public Docket createRestApiEight() {
-        return docketList.get(8);
+
+        return (Docket) this.docketList.get(8);
     }
 
     @Bean
     public Docket createRestApiNine() {
-        return docketList.get(9);
+
+        return (Docket) this.docketList.get(9);
     }
 
 }
