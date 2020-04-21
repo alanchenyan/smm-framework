@@ -168,7 +168,8 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
      */
     private void closeAuthConfigure(HttpSecurity http) throws Exception{
         http.cors().and().csrf().disable().authorizeRequests()
-                .antMatchers("/**").permitAll();
+                .antMatchers("/**").permitAll()
+                .anyRequest().authenticated();
     }
 
 }
