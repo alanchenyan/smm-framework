@@ -129,8 +129,8 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
             closeAuthConfigure(http);
         }else{
             customConfigure(http);
-            commonConfigure(http);
         }
+        commonConfigure(http);
     }
 
 
