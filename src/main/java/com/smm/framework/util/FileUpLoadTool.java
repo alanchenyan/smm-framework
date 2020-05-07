@@ -29,20 +29,30 @@ public class FileUpLoadTool {
 
     public static String uploadFile(MultipartFile file) {
         String directory = getDefalutUploadFilesDirectory();
-        return uploadFile(file,directory);
+        return uploadFile(file,directory,false);
+    }
+
+    public static String uploadFile(MultipartFile file,boolean useOriginalFilename) {
+        String directory = getDefalutUploadFilesDirectory();
+        return uploadFile(file,directory,useOriginalFilename);
     }
 
     public static String uploadFile(MultipartFile file,long maxFileSizeUnitkb) {
         String directory = getDefalutUploadFilesDirectory();
-        return uploadFile(file,directory,FILE_REDIRECT_NAME,maxFileSizeUnitkb);
+        return uploadFile(file,directory,FILE_REDIRECT_NAME,false,maxFileSizeUnitkb);
     }
 
-    public static String uploadFile(MultipartFile file,String fileDirectoryPath) {
-        return uploadFile(file,fileDirectoryPath,FILE_REDIRECT_NAME,DEFAULT_MAX_SIZE_UNIT_KB);
+    public static String uploadFile(MultipartFile file,boolean useOriginalFilename,long maxFileSizeUnitkb) {
+        String directory = getDefalutUploadFilesDirectory();
+        return uploadFile(file,directory,FILE_REDIRECT_NAME,useOriginalFilename,maxFileSizeUnitkb);
     }
 
-    public static String uploadFile(MultipartFile file,String fileDirectoryPath,String fileRedirectName) {
-        return uploadFile(file,fileDirectoryPath,fileRedirectName,DEFAULT_MAX_SIZE_UNIT_KB);
+    public static String uploadFile(MultipartFile file,String fileDirectoryPath,boolean useOriginalFilename) {
+        return uploadFile(file,fileDirectoryPath,FILE_REDIRECT_NAME,useOriginalFilename,DEFAULT_MAX_SIZE_UNIT_KB);
+    }
+
+    public static String uploadFile(MultipartFile file,String fileDirectoryPath,String fileRedirectName,boolean useOriginalFilename) {
+        return uploadFile(file,fileDirectoryPath,fileRedirectName,useOriginalFilename,DEFAULT_MAX_SIZE_UNIT_KB);
     }
 
     /**
@@ -52,7 +62,7 @@ public class FileUpLoadTool {
      * @param maxFileSizeUnitkb 文件最大大小（单位KB）
      * @return
      */
-    public static String uploadFile(MultipartFile file,String fileDirectoryPath,String fileRedirectName,long maxFileSizeUnitkb) {
+    public static String uploadFile(MultipartFile file,String fileDirectoryPath,String fileRedirectName,boolean useOriginalFilename,long maxFileSizeUnitkb) {
 
         long maxFileSizeByte = maxFileSizeUnitkb  * 1024;
         if(file.getSize() > maxFileSizeByte){
@@ -62,14 +72,19 @@ public class FileUpLoadTool {
 
         try {
             String oldFileName = file.getOriginalFilename();
-            String[] names = oldFileName.split("\\.");
-            if(names.length>1){
-                String fileType = names[names.length-1];
-                String imageName = getRandomImageName()+"."+fileType;
-                file.transferTo(new File(fileDirectoryPath + imageName));
-                return fileRedirectName+"/"+imageName;
+            if(useOriginalFilename){
+                file.transferTo(new File(fileDirectoryPath + oldFileName));
+                return fileRedirectName+"/"+oldFileName;
             }else{
-                throw new ServiceException(I18NRESOURCE.getValue("bad_filename"));
+                String[] names = oldFileName.split("\\.");
+                if(names.length>1){
+                    String fileType = names[names.length-1];
+                    String newFileName = getRandomImageName()+"."+fileType;
+                    file.transferTo(new File(fileDirectoryPath + newFileName));
+                    return fileRedirectName+"/"+newFileName;
+                }else{
+                    throw new ServiceException(I18NRESOURCE.getValue("bad_filename"));
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
