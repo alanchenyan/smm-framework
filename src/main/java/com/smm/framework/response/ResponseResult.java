@@ -27,7 +27,7 @@ public class ResponseResult {
         this.data = data;
     }
 
-    public static ResponseResult success(String msg){
+    public static ResponseResult successMsg(String msg){
         return new ResponseResult(200,msg,"200");
     }
 
