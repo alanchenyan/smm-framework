@@ -19,12 +19,16 @@ public class ResponseResult {
     private static I18nResource i18nResource = I18nResourceFactory.getI18nResource();
 
 
-    private ResponseResult(){}
+    public ResponseResult(){}
 
-    private ResponseResult(int code, String msg, Object data) {
+    public ResponseResult(int code, String msg, Object data) {
         this.code = code;
         this.msg = msg;
         this.data = data;
+    }
+
+    public static ResponseResult success(String msg){
+        return new ResponseResult(200,msg,"200");
     }
 
     public static ResponseResult success(Object data){
