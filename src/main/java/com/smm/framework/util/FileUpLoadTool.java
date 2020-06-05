@@ -23,6 +23,8 @@ public class FileUpLoadTool {
 
     public static final String FILE_REDIRECT_NAME = "files";
 
+    private static final String UTF_8 = "UTF-8";
+
     private static final I18nResource I18NRESOURCE = I18nResourceFactory.getI18nResource();
 
     private FileUpLoadTool(){}
@@ -73,14 +75,18 @@ public class FileUpLoadTool {
         try {
             String oldFileName = file.getOriginalFilename();
             if(useOriginalFilename){
-                file.transferTo(new File(fileDirectoryPath + oldFileName));
+                String fileAbsolutePath = fileDirectoryPath + oldFileName;
+                String filePath = new String(fileAbsolutePath.getBytes(UTF_8) , UTF_8);
+                file.transferTo(new File(filePath));
                 return fileRedirectName+"/"+oldFileName;
             }else{
                 String[] names = oldFileName.split("\\.");
                 if(names.length>1){
                     String fileType = names[names.length-1];
                     String newFileName = getRandomImageName()+"."+fileType;
-                    file.transferTo(new File(fileDirectoryPath + newFileName));
+                    String fileAbsolutePath = fileDirectoryPath + newFileName;
+                    String filePath = new String(fileAbsolutePath.getBytes(UTF_8) , UTF_8);
+                    file.transferTo(new File(filePath));
                     return fileRedirectName+"/"+newFileName;
                 }else{
                     throw new ServiceException(I18NRESOURCE.getValue("bad_filename"));
