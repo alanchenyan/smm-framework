@@ -19,7 +19,7 @@ public class FileUpLoadTool {
 
     private static final long DEFAULT_MAX_SIZE_UNIT_KB = 1024 * 10;
 
-    private static final String DEFALUT_UPLOAD_FILE_DIRECTORY = "/uploadfiles/";
+    private static final String DEFALUT_UPLOAD_FILE_DIRECTORY = "uploadfiles";
 
     public static final String FILE_REDIRECT_NAME = "files";
 
@@ -123,7 +123,7 @@ public class FileUpLoadTool {
         }
     }
 
-    public static String getDefalutUploadFilesDirectory(){
+    public static String getApplicationUploadFilesDirectory(String uploadFileDirectory){
         String currentDirectory = null;
         try {
             //得到当前目录
@@ -132,7 +132,7 @@ public class FileUpLoadTool {
             e.printStackTrace();
             throw new ServiceException(I18NRESOURCE.getValue("file_upload_failed"));
         }
-        String directory = currentDirectory +DEFALUT_UPLOAD_FILE_DIRECTORY;
+        String directory = currentDirectory +"/"+uploadFileDirectory+"/";
 
         File dirFile = new File(directory);
         if (!dirFile.exists()) {
@@ -141,7 +141,11 @@ public class FileUpLoadTool {
         return directory;
     }
 
-    private static String getRandomImageName() {
+    public static String getDefalutUploadFilesDirectory(){
+        return getApplicationUploadFilesDirectory(DEFALUT_UPLOAD_FILE_DIRECTORY);
+    }
+
+    public static String getRandomImageName() {
         return System.currentTimeMillis() + RandomStringUtils.randomAlphanumeric(6);
     }
 }
