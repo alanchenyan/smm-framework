@@ -1,6 +1,7 @@
 package com.smm.framework.authority.exception;
 
 import com.alibaba.fastjson.JSONObject;
+import com.smm.framework.constant.GlobalConstants;
 import com.smm.framework.i18n.I18nResource;
 import com.smm.framework.i18n.I18nResourceFactory;
 import org.springframework.security.core.AuthenticationException;
@@ -33,8 +34,14 @@ public class GlobalAuthenticationEntryPoint implements AuthenticationEntryPoint 
 
         Map<String,Object> exceptionMap = new HashMap(3);
 
+        String msg = i18nResource.getValue("authentication_failed",httpServletRequest);
+        Object loginFaildMessage = httpServletRequest.getAttribute(GlobalConstants.LOGON_FAILD_MESSAGE);
+        if(loginFaildMessage!=null){
+            msg = (String)loginFaildMessage;
+        }
+
         exceptionMap.put("code",403);
-        exceptionMap.put("msg", i18nResource.getValue("authentication_failed",httpServletRequest));
+        exceptionMap.put("msg", msg);
         exceptionMap.put("data",exception.getMessage());
 
         JSONObject responseJsonObject = new JSONObject(exceptionMap);
