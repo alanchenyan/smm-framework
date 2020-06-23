@@ -25,7 +25,7 @@ import java.util.List;
 @EnableSwagger2
 public class GlobalSwaggerConfig implements WebMvcConfigurer {
 
-    private final int DOCKET_MAX_SIZE = 10;
+    private final int DOCKET_MAX_SIZE = 15;
 
     private List<Docket> docketList;
 
@@ -71,7 +71,7 @@ public class GlobalSwaggerConfig implements WebMvcConfigurer {
 
         List<SwaggerApiInfo> swaggerApiInfoList = swaggerApiInfos;
         if (swaggerApiInfoList.size() > DOCKET_MAX_SIZE) {
-            throw new RuntimeException("smm框架Swagger最多只支持配置10个Docket");
+            throw new RuntimeException("smm框架Swagger最多只支持配置15个Docket");
         } else {
             this.initConfigureDockets(swaggerApiInfoList);
             this.initDisableDockets(swaggerApiInfoList.size());
@@ -112,56 +112,71 @@ public class GlobalSwaggerConfig implements WebMvcConfigurer {
 
     @Bean
     public Docket createRestApiOne() {
-
         return (Docket) this.docketList.get(1);
     }
 
     @Bean
     public Docket createRestApiTwo() {
-
         return (Docket) this.docketList.get(2);
     }
 
     @Bean
     public Docket createRestApiThree() {
-
         return (Docket) this.docketList.get(3);
     }
 
     @Bean
     public Docket createRestApiFour() {
-
         return (Docket) this.docketList.get(4);
     }
 
     @Bean
     public Docket createRestApiFive() {
-
         return (Docket) this.docketList.get(5);
     }
 
     @Bean
     public Docket createRestApiSix() {
-
         return (Docket) this.docketList.get(6);
     }
 
     @Bean
     public Docket createRestApiSeven() {
-
         return (Docket) this.docketList.get(7);
     }
 
     @Bean
     public Docket createRestApiEight() {
-
         return (Docket) this.docketList.get(8);
     }
 
     @Bean
     public Docket createRestApiNine() {
-
         return (Docket) this.docketList.get(9);
     }
 
+    @Bean
+    public Docket createRestApi10() {
+        return (Docket) this.docketList.get(10);
+    }
+
+    @Bean
+    public Docket createRestApi11() {
+        return (Docket) this.docketList.get(11);
+    }
+
+    @Bean
+    public Docket createRestApi12() {
+        return (Docket) this.docketList.get(12);
+    }
+
+    @Bean
+    public Docket createRestApi13() {
+        return (Docket) this.docketList.get(13);
+    }
+
+    @Bean
+    public Docket createRestApi14() {
+        return (Docket) this.docketList.get(14);
+    }
 }
