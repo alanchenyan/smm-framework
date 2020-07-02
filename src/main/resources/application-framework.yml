@@ -7,9 +7,3 @@ spring:
 
 swagger:
   enable: true
-
-oss:
-  endpoint:
-  accessKeyId:
-  accessKeySecret:
-  bucketName:

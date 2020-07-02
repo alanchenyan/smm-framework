@@ -30,16 +30,6 @@ public class AliyunOssComponent {
     @Value("${oss.bucketName}")
     private String bucketName;
 
-    public AliyunOssComponent() {
-    }
-
-    public AliyunOssComponent(String endpoint,String accessKeyId,String accessKeySecret,String bucketName) {
-        this.endpoint = endpoint;
-        this.accessKeyId = accessKeyId;
-        this.accessKeySecret = accessKeySecret;
-        this.bucketName = bucketName;
-    }
-
     public String uploadImage(MultipartFile file) {
 
         boolean checkResult = checkParameter();
@@ -67,8 +57,8 @@ public class AliyunOssComponent {
 
     public String uploadFile(File file) {
 
-        OSS ossClient = new OSSClientBuilder().build(getEndpoint(), getAccessKeyId(), getAccessKeySecret());
-        PutObjectRequest putObjectRequest = new PutObjectRequest(getBucketName(), file.getName(), file);
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
+        PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, file.getName(), file);
         ossClient.putObject(putObjectRequest);
         ossClient.shutdown();
 
@@ -76,38 +66,22 @@ public class AliyunOssComponent {
     }
 
     private boolean checkParameter(){
-        if(StringUtils.isBlank(getEndpoint())){
+        if(StringUtils.isBlank(endpoint)){
             throw new RuntimeException("请配置endpoint");
         }
 
-        if(StringUtils.isBlank(getAccessKeyId())){
+        if(StringUtils.isBlank(accessKeyId)){
             throw new RuntimeException("请配置accessKeyId");
         }
 
-        if(StringUtils.isBlank(getAccessKeySecret())){
+        if(StringUtils.isBlank(accessKeySecret)){
             throw new RuntimeException("请配置accessKeySecret");
         }
 
-        if(StringUtils.isBlank(getBucketName())){
+        if(StringUtils.isBlank(bucketName)){
             throw new RuntimeException("请配置bucketName");
         }
 
         return true;
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public String getAccessKeyId() {
-        return accessKeyId;
-    }
-
-    public String getAccessKeySecret() {
-        return accessKeySecret;
-    }
-
-    public String getBucketName() {
-        return bucketName;
     }
 }
