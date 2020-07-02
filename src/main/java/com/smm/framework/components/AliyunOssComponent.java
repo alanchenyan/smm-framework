@@ -30,29 +30,51 @@ public class AliyunOssComponent {
     @Value("${oss.bucketName}")
     private String bucketName;
 
-    public String uploadImage(MultipartFile file) {
+    /**
+     * 上传图片到OSS(新文件名为随机数、图片会被压缩)
+     * @param file
+     * @return
+     */
+    public String uploadImageByResize(MultipartFile file) {
 
         boolean checkResult = checkParameter();
         if(checkResult){
             String tempFileName = FileUpLoadTool.uploadImageByResize(file);
-            String[] tempFileNameArry = tempFileName.split("/");
-            if(tempFileNameArry.length == 2){
-                tempFileName = tempFileNameArry[1];
-            }
-
-            String tempFileDirectory = FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+tempFileName;
-            File tempFile = FileUtil.file(tempFileDirectory);
-
-
-            String fileName =  uploadFile(tempFile);
-
-            //程序结束时，删除原图
-            FileUpLoadTool.deleteFile(tempFile);
-
+            String fileName = dealFile(tempFileName);
             return fileName;
         }
 
        return null;
+    }
+
+    /**
+     * 上传任意格式的文件(新文件名为随机数)
+     * @param file
+     * @return
+     */
+    public String uploadFile(MultipartFile file) {
+        boolean checkResult = checkParameter();
+        if(checkResult){
+            String tempFileName = FileUpLoadTool.uploadFile(file);
+            String fileName = dealFile(tempFileName);
+            return fileName;
+        }
+        return null;
+    }
+
+    /**
+     * 上传任意文件(保留原来的文件名)
+     * @param file
+     * @return
+     */
+    public String uploadFileUseOriginalFilename(MultipartFile file) {
+        boolean checkResult = checkParameter();
+        if(checkResult){
+            String tempFileName = FileUpLoadTool.uploadFile(file,true);
+            String fileName = dealFile(tempFileName);
+            return fileName;
+        }
+        return null;
     }
 
     public String uploadFile(File file) {
@@ -83,5 +105,21 @@ public class AliyunOssComponent {
         }
 
         return true;
+    }
+
+    private String dealFile(String tempFileName){
+        String[] tempFileNameArry = tempFileName.split("/");
+        if(tempFileNameArry.length == 2){
+            tempFileName = tempFileNameArry[1];
+        }
+
+        String tempFileDirectory = FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+tempFileName;
+        File tempFile = FileUtil.file(tempFileDirectory);
+        String fileName =  uploadFile(tempFile);
+
+        //程序结束时，删除原图
+        FileUpLoadTool.deleteFile(tempFile);
+
+        return fileName;
     }
 }
