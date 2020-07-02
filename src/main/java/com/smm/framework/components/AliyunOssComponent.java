@@ -7,6 +7,7 @@ import com.aliyun.oss.model.PutObjectRequest;
 import com.smm.framework.util.FileUpLoadTool;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -16,6 +17,7 @@ import java.io.File;
  * @description 阿里云OSS文件管理
  * @date 2020-07-02
  */
+@Component
 public class AliyunOssComponent {
 
     @Value("${oss.endpoint}")
@@ -68,9 +70,18 @@ public class AliyunOssComponent {
      * @return
      */
     public String uploadFileUseOriginalFilename(MultipartFile file) {
+       return uploadFileUseOriginalFilename(file,40*1024);
+    }
+
+    /**
+     * 上传任意文件(保留原来的文件名)
+     * @param file
+     * @return
+     */
+    public String uploadFileUseOriginalFilename(MultipartFile file,long maxFileSizeUnitkb) {
         boolean checkResult = checkParameter();
         if(checkResult){
-            String tempFileName = FileUpLoadTool.uploadFile(file,true);
+            String tempFileName = FileUpLoadTool.uploadFile(file,true,maxFileSizeUnitkb);
             String fileName = dealFile(tempFileName);
             return fileName;
         }
