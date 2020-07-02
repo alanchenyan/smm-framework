@@ -1,5 +1,7 @@
 package com.smm.framework.util;
 
+import cn.hutool.core.img.Img;
+import cn.hutool.core.io.FileUtil;
 import com.smm.framework.exception.ServiceException;
 import com.smm.framework.i18n.I18nResource;
 import com.smm.framework.i18n.I18nResourceFactory;
@@ -55,6 +57,44 @@ public class FileUpLoadTool {
 
     public static String uploadFile(MultipartFile file,String fileDirectoryPath,String fileRedirectName,boolean useOriginalFilename) {
         return uploadFile(file,fileDirectoryPath,fileRedirectName,useOriginalFilename,DEFAULT_MAX_SIZE_UNIT_KB);
+    }
+
+    /**
+     * 上传图片并压缩
+     * @param file
+     * @return
+     */
+    public static String uploadImageByResize(MultipartFile file) {
+        return uploadImageByResize(file,0.5);
+    }
+
+    /**
+     * 上传图片并压缩
+     * @param file
+     * @param quality 压缩比例：0~1
+     * @return
+     */
+    public static String uploadImageByResize(MultipartFile file,double quality) {
+        String originalFileName = FileUpLoadTool.uploadFile(file);
+        originalFileName = originalFileName.replaceAll("files/","");
+        String newFileName = getRandomImageName()+".jpg";
+
+        File originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+originalFileName);
+
+        try{
+            Img.from(originalFile)
+                    .setQuality(quality)
+                    .write(FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+newFileName));
+
+            //程序结束时，删除原图
+            deleteFile(originalFile);
+
+        }catch (Exception e){
+            // 如果压缩失败（格式不支持）直接返回原图
+            return "files/"+originalFileName;
+        }
+
+        return "files/"+newFileName;
     }
 
     /**
@@ -141,11 +181,25 @@ public class FileUpLoadTool {
         return directory;
     }
 
-    public static String getDefalutUploadFilesDirectory(){
-        return getApplicationUploadFilesDirectory(DEFALUT_UPLOAD_FILE_DIRECTORY);
+
+    /**
+     * 删除
+     * @param files
+     */
+    public static void deleteFile(File... files) {
+        for (File file : files) {
+            if (file.exists()) {
+                file.delete();
+            }
+        }
     }
 
     public static String getRandomImageName() {
         return System.currentTimeMillis() + RandomStringUtils.randomAlphanumeric(6);
+    }
+
+
+    public static String getDefalutUploadFilesDirectory(){
+        return getApplicationUploadFilesDirectory(DEFALUT_UPLOAD_FILE_DIRECTORY);
     }
 }
