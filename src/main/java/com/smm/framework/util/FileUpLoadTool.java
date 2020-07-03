@@ -27,6 +27,8 @@ public class FileUpLoadTool {
 
     private static final String UTF_8 = "UTF-8";
 
+    private static final double DEFAULT_QUALITY = 0.6;
+
     private static final I18nResource I18NRESOURCE = I18nResourceFactory.getI18nResource();
 
     private FileUpLoadTool(){}
@@ -65,7 +67,7 @@ public class FileUpLoadTool {
      * @return
      */
     public static String uploadImageByResize(MultipartFile file) {
-        return uploadImageByResize(file,0.5);
+        return uploadImageByResize(file,DEFAULT_QUALITY);
     }
 
     /**
