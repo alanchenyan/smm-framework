@@ -37,6 +37,10 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcConfigurer {
 
+    /**
+     * 支持返回 text/plan 格式  字符串不会带双引号
+     * @return
+     */
     public boolean supportTextPlan(){
         return false;
     }
