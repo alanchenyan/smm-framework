@@ -37,6 +37,10 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcConfigurer {
 
+    public boolean supportTextPlan(){
+        return false;
+    }
+
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> aClass) {
         return true;
@@ -66,7 +70,9 @@ public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcC
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
 
-        converters.add(stringHttpMessageConverter());
+        if(supportTextPlan()){
+            converters.add(stringHttpMessageConverter());
+        }
 
         //创建fastJson消息转换器
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
