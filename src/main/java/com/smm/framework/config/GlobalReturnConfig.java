@@ -4,10 +4,12 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.smm.framework.response.ResponseResult;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -63,13 +65,15 @@ public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcC
      */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+
+        converters.add(stringHttpMessageConverter());
+
         //创建fastJson消息转换器
         FastJsonHttpMessageConverter converter = new FastJsonHttpMessageConverter();
 
         // 解决Content-Type cannot contain wildcard type '*'问题
         List<MediaType> supportedMediaTypes = new ArrayList<>();
         supportedMediaTypes.add(MediaType.APPLICATION_JSON);
-        supportedMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
         supportedMediaTypes.add(MediaType.APPLICATION_ATOM_XML);
         supportedMediaTypes.add(MediaType.APPLICATION_FORM_URLENCODED);
         supportedMediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
@@ -93,5 +97,10 @@ public class GlobalReturnConfig  implements ResponseBodyAdvice<Object> , WebMvcC
         converter.setFastJsonConfig(fastJsonConfig);
 
         converters.add(converter);
+    }
+
+    @Bean
+    public StringHttpMessageConverter stringHttpMessageConverter() {
+        return new StringHttpMessageConverter();
     }
 }
