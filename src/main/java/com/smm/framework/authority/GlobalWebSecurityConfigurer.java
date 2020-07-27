@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+import java.util.List;
+
 /**
  * @author Alan Chen
  * @description
@@ -42,6 +44,14 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
      * @return
      */
     protected String loginEncryptRsaPrivateKey(){
+        return null;
+    }
+
+    /**
+     * 登录时开启RSA加密的登录类型
+     * @return
+     */
+    protected List<String> loginEncryptRsaClientType(){
         return null;
     }
 
@@ -149,7 +159,16 @@ public class GlobalWebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private void commonConfigure(HttpSecurity http) throws Exception{
 
-        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(authenticationManager(),signingKey(),tokenNeverExpires(),expirationTime(),loginEncryptRsaPrivateKey());
+        UsernamePasswordAuthParameter parameter = new UsernamePasswordAuthParameter();
+        parameter.setAuthenticationManager(authenticationManager());
+        parameter.setSigningKey(signingKey());
+        parameter.setTokenNeverExpires(tokenNeverExpires());
+        parameter.setExpirationTime(expirationTime());
+        parameter.setLoginEncryptRsaPrivateKey(loginEncryptRsaPrivateKey());
+        parameter.setLoginEncryptRsaClientType(loginEncryptRsaClientType());
+
+
+        GlobalUsernamePasswordAuthenticationFilter usernamePasswordAuthenticationFilter = new GlobalUsernamePasswordAuthenticationFilter(parameter);
         GlobalBasicAuthenticationFilter basicAuthenticationFilter = new GlobalBasicAuthenticationFilter(authenticationManager(),signingKey());
 
         http.addFilter(usernamePasswordAuthenticationFilter)

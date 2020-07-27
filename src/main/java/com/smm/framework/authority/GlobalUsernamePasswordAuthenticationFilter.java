@@ -2,10 +2,10 @@ package com.smm.framework.authority;
 
 import com.alibaba.fastjson.JSONObject;
 import com.smm.framework.authority.rsa.RsaUtil;
+import com.smm.framework.constant.GlobalConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -19,34 +19,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author Alan Chen
  * @description
  * @date 2019-10-12
+ *
  */
 public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
-
-    private AuthenticationManager authenticationManager;
-
-    /**
-     * JWT 私钥
-     */
-    private String signingKey;
-
-    /**
-     * JWT Token有效期时间
-     */
-    private long expirationTime;
-
-    /**
-     * JWT Token有 是否永不过期
-     */
-    private boolean tokenNeverExpires;
 
     /**
      * JWT Token 过期日期
@@ -54,18 +35,13 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
     private Date expirationDate;
 
     /**
-     * 登录时用RSA加密的私钥
+     * 参数对象
      */
-    private String loginEncryptRsaPrivateKey;
+    private UsernamePasswordAuthParameter parameter;
 
 
-
-    public GlobalUsernamePasswordAuthenticationFilter(AuthenticationManager authenticationManager,String signingKey,boolean tokenNeverExpires,long expirationTime,String loginEncryptRsaPrivateKey) {
-        this.authenticationManager = authenticationManager;
-        this.signingKey = signingKey;
-        this.tokenNeverExpires = tokenNeverExpires;
-        this.expirationTime = expirationTime;
-        this.loginEncryptRsaPrivateKey = loginEncryptRsaPrivateKey;
+    public GlobalUsernamePasswordAuthenticationFilter(UsernamePasswordAuthParameter parameter) {
+        this.parameter = parameter;
     }
 
     @Override
@@ -75,12 +51,20 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
         String username = this.obtainUsername(request);
         String password = this.obtainPassword(request);
 
-        if(StringUtils.isNotBlank(loginEncryptRsaPrivateKey)){
-            username = RsaUtil.privateDecrypt(username,loginEncryptRsaPrivateKey);
-            password = RsaUtil.privateDecrypt(password,loginEncryptRsaPrivateKey);
+        if(StringUtils.isNotBlank(parameter.getLoginEncryptRsaPrivateKey())){
+
+            String clientType = request.getHeader(GlobalConstants.CLIENT_LOGIN_TYPE);
+            List<String> loginEncryptRsaClientType = parameter.getLoginEncryptRsaClientType();
+
+            if(loginEncryptRsaClientType !=null && loginEncryptRsaClientType.size()>0){
+                if(loginEncryptRsaClientType.contains(clientType)){
+                    username = RsaUtil.privateDecrypt(username,parameter.getLoginEncryptRsaPrivateKey());
+                    password = RsaUtil.privateDecrypt(password,parameter.getLoginEncryptRsaPrivateKey());
+                }
+            }
         }
 
-        return authenticationManager.authenticate(
+        return parameter.getAuthenticationManager().authenticate(
                 new UsernamePasswordAuthenticationToken(
                         username,
                         password,
@@ -93,17 +77,17 @@ public class GlobalUsernamePasswordAuthenticationFilter extends UsernamePassword
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
                                             FilterChain chain, Authentication authResult) {
         String token;
-        if(tokenNeverExpires){
+        if(parameter.isTokenNeverExpires()){
             token = Jwts.builder()
                     .setSubject(((User) authResult.getPrincipal()).getUsername())
                     .setExpiration(getExpiration())
-                    .signWith(SignatureAlgorithm.HS512, signingKey)
+                    .signWith(SignatureAlgorithm.HS512, parameter.getSigningKey())
                     .compact();
         }else{
              token = Jwts.builder()
                     .setSubject(((User) authResult.getPrincipal()).getUsername())
-                    .setExpiration(new Date(System.currentTimeMillis() +  expirationTime))
-                    .signWith(SignatureAlgorithm.HS512, signingKey)
+                    .setExpiration(new Date(System.currentTimeMillis() +  parameter.getExpirationTime()))
+                    .signWith(SignatureAlgorithm.HS512, parameter.getSigningKey())
                     .compact();
         }
 
