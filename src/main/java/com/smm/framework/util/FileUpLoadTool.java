@@ -27,7 +27,7 @@ public class FileUpLoadTool {
 
     private static final String UTF_8 = "UTF-8";
 
-    private static final double DEFAULT_QUALITY = 0.8;
+    private static final double DEFAULT_QUALITY = 0.7;
 
     private static final I18nResource I18NRESOURCE = I18nResourceFactory.getI18nResource();
 
@@ -67,7 +67,21 @@ public class FileUpLoadTool {
      * @return
      */
     public static String uploadImageByResize(MultipartFile file) {
-        return uploadImageByResize(file,DEFAULT_QUALITY);
+        double size = getFileSize(file.getSize(),"M");
+
+        if(size<=0.5){
+            return uploadImageByResize(file,DEFAULT_QUALITY);
+        }else if(size>0.5 && size<=1){
+            return uploadImageByResize(file,0.5);
+        }else if(size>1 && size<=3){
+            return FileUpLoadTool.uploadImageByResize(file,0.3);
+        }else if(size>3 && size<=6){
+            return FileUpLoadTool.uploadImageByResize(file,0.2);
+        }else if(size>6){
+            return FileUpLoadTool.uploadImageByResize(file,0.1);
+        }else{
+            return uploadImageByResize(file,DEFAULT_QUALITY);
+        }
     }
 
     /**
@@ -203,5 +217,19 @@ public class FileUpLoadTool {
 
     public static String getDefalutUploadFilesDirectory(){
         return getApplicationUploadFilesDirectory(DEFALUT_UPLOAD_FILE_DIRECTORY);
+    }
+
+    public static double getFileSize(Long len, String unit) {
+        double fileSize = 0;
+        if ("B".equals(unit.toUpperCase())) {
+            fileSize = (double) len;
+        } else if ("K".equals(unit.toUpperCase())) {
+            fileSize = (double) len / 1024;
+        } else if ("M".equals(unit.toUpperCase())) {
+            fileSize = (double) len / 1048576;
+        } else if ("G".equals(unit.toUpperCase())) {
+            fileSize = (double) len / 1073741824;
+        }
+        return fileSize;
     }
 }
