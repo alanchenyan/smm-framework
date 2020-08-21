@@ -1,6 +1,7 @@
 package com.smm.framework.util;
 
 import cn.hutool.core.img.Img;
+import cn.hutool.core.img.ImgUtil;
 import cn.hutool.core.io.FileUtil;
 import com.smm.framework.exception.ServiceException;
 import com.smm.framework.i18n.I18nResource;
@@ -9,6 +10,8 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -67,20 +70,29 @@ public class FileUpLoadTool {
      * @return
      */
     public static String uploadImageByResize(MultipartFile file) {
+        return uploadImageByResize(file,0);
+    }
+
+    /**
+     * 上传图片并压缩
+     * @param file
+     * @return
+     */
+    public static String uploadImageByResize(int scanSize,MultipartFile file) {
         double size = getFileSize(file.getSize(),"M");
 
         if(size<=0.5){
-            return uploadImageByResize(file,DEFAULT_QUALITY);
+            return uploadImageByResize(file,DEFAULT_QUALITY,scanSize);
         }else if(size>0.5 && size<=1){
-            return uploadImageByResize(file,0.5);
+            return uploadImageByResize(file,0.5,scanSize);
         }else if(size>1 && size<=3){
-            return FileUpLoadTool.uploadImageByResize(file,0.3);
+            return FileUpLoadTool.uploadImageByResize(file,0.3,scanSize);
         }else if(size>3 && size<=6){
-            return FileUpLoadTool.uploadImageByResize(file,0.2);
+            return FileUpLoadTool.uploadImageByResize(file,0.2,scanSize);
         }else if(size>6){
-            return FileUpLoadTool.uploadImageByResize(file,0.1);
+            return FileUpLoadTool.uploadImageByResize(file,0.1,scanSize);
         }else{
-            return uploadImageByResize(file,DEFAULT_QUALITY);
+            return uploadImageByResize(file,DEFAULT_QUALITY,scanSize);
         }
     }
 
@@ -91,11 +103,27 @@ public class FileUpLoadTool {
      * @return
      */
     public static String uploadImageByResize(MultipartFile file,double quality) {
+        return uploadImageByResize(file,quality,0);
+    }
+
+    /**
+     * 上传图片并裁剪、压缩
+     * @param file
+     * @param quality：压缩比例（像素不变）0~1
+     * @param scanSize：等比例裁剪成指定尺寸
+     * @return
+     */
+    public static String uploadImageByResize(MultipartFile file,double quality,int scanSize) {
         String originalFileName = FileUpLoadTool.uploadFile(file);
         originalFileName = originalFileName.replaceAll("files/","");
         String newFileName = getRandomImageName()+".jpg";
 
         File originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+originalFileName);
+
+        if(scanSize !=0){
+            String scanFileName = imageScale(originalFile,scanSize);
+            originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+scanFileName);
+        }
 
         try{
             Img.from(originalFile)
@@ -111,6 +139,40 @@ public class FileUpLoadTool {
         }
 
         return "files/"+newFileName;
+    }
+
+    /**
+     * 将图片等比例裁剪成指定尺寸
+     * @param file
+     * @param size
+     * @return
+     */
+    public static String imageScale(File file,int size){
+        String newFileName = getRandomImageName()+".jpg";
+
+        BufferedImage bi = null;
+        try {
+            bi = ImageIO.read(file);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        int width = bi.getWidth();
+        int height = bi.getHeight();
+        int min = width>height?height:width;
+
+        float scale = (float)NumberTool.div(size,min);
+
+        ImgUtil.scale(
+                file,
+                FileUtil.file(FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+newFileName)),
+                scale//缩放比例
+        );
+
+        //程序结束时，删除原图
+        deleteFile(file);
+
+        return newFileName;
     }
 
     /**
