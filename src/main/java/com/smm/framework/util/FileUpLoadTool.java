@@ -115,7 +115,7 @@ public class FileUpLoadTool {
      */
     public static String uploadImageByResize(MultipartFile file,double quality,int scanSize) {
         String originalFileName = FileUpLoadTool.uploadFile(file);
-        originalFileName = originalFileName.replaceAll("files/","");
+        originalFileName = originalFileName.replaceAll(FILE_REDIRECT_NAME+"/","");
         String newFileName = getRandomImageName()+".jpg";
 
         File originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+originalFileName);
@@ -135,10 +135,10 @@ public class FileUpLoadTool {
 
         }catch (Exception e){
             // 如果压缩失败（格式不支持）直接返回原图
-            return "files/"+originalFileName;
+            return FILE_REDIRECT_NAME+"/"+originalFileName;
         }
 
-        return "files/"+newFileName;
+        return FILE_REDIRECT_NAME+"/"+newFileName;
     }
 
     /**
