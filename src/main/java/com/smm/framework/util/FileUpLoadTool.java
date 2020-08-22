@@ -30,6 +30,8 @@ public class FileUpLoadTool {
 
     private static final String UTF_8 = "UTF-8";
 
+    private static final String DEFAULT_PICTURE_FORMAT = ".jpg";
+
     private static final double DEFAULT_QUALITY = 0.7;
 
     private static final I18nResource I18NRESOURCE = I18nResourceFactory.getI18nResource();
@@ -116,7 +118,7 @@ public class FileUpLoadTool {
     public static String uploadImageByResize(MultipartFile file,double quality,int scanSize) {
         String originalFileName = FileUpLoadTool.uploadFile(file);
         originalFileName = originalFileName.replaceAll(FILE_REDIRECT_NAME+"/","");
-        String newFileName = getRandomImageName()+".jpg";
+        String newFileName = getRandomImageName()+DEFAULT_PICTURE_FORMAT;
 
         File originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+originalFileName);
 
@@ -148,7 +150,7 @@ public class FileUpLoadTool {
      * @return
      */
     public static String imageScale(File file,int size){
-        String newFileName = getRandomImageName()+".jpg";
+        String newFileName = getRandomImageName()+DEFAULT_PICTURE_FORMAT;
 
         BufferedImage bi = null;
         try {

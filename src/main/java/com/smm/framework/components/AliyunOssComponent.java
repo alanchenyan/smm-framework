@@ -33,6 +33,22 @@ public class AliyunOssComponent {
     private String bucketName;
 
     /**
+     * 上传缩略图
+     * @param scanSize 指定图片尺寸大小
+     * @param file
+     * @return
+     */
+    public String uploadImageResizeSmall(int scanSize,MultipartFile file){
+        boolean checkResult = checkParameter();
+        if(checkResult){
+            String tempFileName = FileUpLoadTool.uploadImageByResize(scanSize,file);
+            String fileName = dealFile(tempFileName);
+            return fileName;
+        }
+        return null;
+    }
+
+    /**
      * 上传图片到OSS(新文件名为随机数、图片会被压缩)
      * @param file
      * @return
