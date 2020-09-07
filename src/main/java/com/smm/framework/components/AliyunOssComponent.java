@@ -42,7 +42,7 @@ public class AliyunOssComponent {
         boolean checkResult = checkParameter();
         if(checkResult){
             String tempFileName = FileUpLoadTool.uploadImageByResize(scanSize,file);
-            String fileName = dealFile(tempFileName);
+            String fileName = uploadAliyunOss(tempFileName);
             return fileName;
         }
         return null;
@@ -58,11 +58,27 @@ public class AliyunOssComponent {
         boolean checkResult = checkParameter();
         if(checkResult){
             String tempFileName = FileUpLoadTool.uploadImageByResize(file);
-            String fileName = dealFile(tempFileName);
+            String fileName = uploadAliyunOss(tempFileName);
             return fileName;
         }
 
        return null;
+    }
+
+
+    /**
+     * 上传图片并裁剪成正方形
+     * @param file
+     * @return
+     */
+    public String uploadImageByCutSquare(MultipartFile file){
+        boolean checkResult = checkParameter();
+        if(checkResult){
+            String tempFileName = FileUpLoadTool.uploadImageByCutSquare(file);
+            String fileName = uploadAliyunOss(tempFileName);
+            return fileName;
+        }
+        return null;
     }
 
     /**
@@ -74,7 +90,7 @@ public class AliyunOssComponent {
         boolean checkResult = checkParameter();
         if(checkResult){
             String tempFileName = FileUpLoadTool.uploadFile(file);
-            String fileName = dealFile(tempFileName);
+            String fileName = uploadAliyunOss(tempFileName);
             return fileName;
         }
         return null;
@@ -98,7 +114,7 @@ public class AliyunOssComponent {
         boolean checkResult = checkParameter();
         if(checkResult){
             String tempFileName = FileUpLoadTool.uploadFile(file,true,maxFileSizeUnitkb);
-            String fileName = dealFile(tempFileName);
+            String fileName = uploadAliyunOss(tempFileName);
             return fileName;
         }
         return null;
@@ -134,7 +150,7 @@ public class AliyunOssComponent {
         return true;
     }
 
-    private String dealFile(String tempFileName){
+    private String uploadAliyunOss(String tempFileName){
         String[] tempFileNameArry = tempFileName.split("/");
         if(tempFileNameArry.length == 2){
             tempFileName = tempFileNameArry[1];
