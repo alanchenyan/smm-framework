@@ -11,6 +11,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -118,16 +119,15 @@ public class FileUpLoadTool {
     public static String uploadImageByResize(MultipartFile file,double quality,int scanSize) {
         String originalFileName = FileUpLoadTool.uploadFile(file);
         originalFileName = originalFileName.replaceAll(FILE_REDIRECT_NAME+"/","");
-        String newFileName = getRandomImageName()+DEFAULT_PICTURE_FORMAT;
-
         File originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+originalFileName);
 
-        if(scanSize !=0){
-            String scanFileName = imageScale(originalFile,scanSize);
-            originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+scanFileName);
-        }
-
+        String newFileName = getRandomImageName()+DEFAULT_PICTURE_FORMAT;
         try{
+            if(scanSize !=0){
+                String scanFileName = imageScale(originalFile,scanSize);
+                originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+scanFileName);
+            }
+
             Img.from(originalFile)
                     .setQuality(quality)
                     .write(FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+newFileName));
@@ -149,15 +149,9 @@ public class FileUpLoadTool {
      * @param size
      * @return
      */
-    public static String imageScale(File file,int size){
+    private static String imageScale(File file,int size) throws IOException {
         String newFileName = getRandomImageName()+DEFAULT_PICTURE_FORMAT;
-
-        BufferedImage bi = null;
-        try {
-            bi = ImageIO.read(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        BufferedImage bi = ImageIO.read(file);
 
         int width = bi.getWidth();
         int height = bi.getHeight();
@@ -175,6 +169,67 @@ public class FileUpLoadTool {
         deleteFile(file);
 
         return newFileName;
+    }
+
+    /**
+     * 上传图片并裁剪成正方形
+     * @param file
+     * @return
+     */
+    public static String uploadImageByCutSquare(MultipartFile file){
+
+        String originalFileName = FileUpLoadTool.uploadFile(file);
+        originalFileName = originalFileName.replaceAll(FILE_REDIRECT_NAME+"/","");
+        File originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+originalFileName);
+
+        //压缩图片
+        String newFileName = getRandomImageName()+DEFAULT_PICTURE_FORMAT;
+        try{
+            //将图片裁剪成正方形
+            String cutFileName = cutSquareImage(originalFile);
+            originalFile = FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+cutFileName);
+
+
+            Img.from(originalFile)
+                    .setQuality(DEFAULT_QUALITY)
+                    .write(FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+newFileName));
+
+            //程序结束时，删除原图
+            deleteFile(originalFile);
+
+        }catch (Exception e){
+            // 如果压缩失败（格式不支持）直接返回原图
+            return FILE_REDIRECT_NAME+"/"+originalFileName;
+        }
+
+        return FILE_REDIRECT_NAME+"/"+newFileName;
+
+    }
+
+    /**
+     * 将图片裁剪成正方形
+     * @param file
+     * @return
+     */
+    private static String cutSquareImage(File file) throws IOException {
+        BufferedImage bi = ImageIO.read(file);
+
+        int width = bi.getWidth();
+        int height = bi.getHeight();
+        int min = width>height?height:width;
+
+        String newFileName = getRandomImageName()+DEFAULT_PICTURE_FORMAT;
+
+        ImgUtil.cut(file,
+                FileUtil.file(FileUtil.file(FileUpLoadTool.getDefalutUploadFilesDirectory()+"/"+newFileName)),
+                new Rectangle(0, 0, min, min)//裁剪的矩形区域
+        );
+
+        //程序结束时，删除原图
+        deleteFile(file);
+
+        return newFileName;
+
     }
 
     /**
