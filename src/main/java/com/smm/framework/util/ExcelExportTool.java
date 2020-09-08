@@ -54,7 +54,8 @@ public class ExcelExportTool {
      * @param datas
      */
     public static String simpleExport(String excelDirectory,LinkedHashMap<String,String> headerAlias, List datas){
-        String filePath = getExcelDirectoryPath(excelDirectory)+createExcelName();
+        String fileName = createExcelName();
+        String filePath = getExcelDirectoryPath(excelDirectory)+fileName;
         ExcelWriter writer = ExcelUtil.getWriter(filePath);
 
         writer.setHeaderAlias(headerAlias);
@@ -62,7 +63,8 @@ public class ExcelExportTool {
         writer.write(datas, true);
         writer.close();
 
-        return filePath;
+        String fileAccessPath = excelDirectory+"/"+fileName;
+        return fileAccessPath;
     }
 
     private static String createExcelName(){

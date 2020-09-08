@@ -87,13 +87,15 @@ public class FileUpLoadTool {
         if(size<=0.5){
             return uploadImageByResize(file,DEFAULT_QUALITY,scanSize);
         }else if(size>0.5 && size<=1){
-            return uploadImageByResize(file,0.5,scanSize);
+            return uploadImageByResize(file,0.6,scanSize);
         }else if(size>1 && size<=3){
-            return FileUpLoadTool.uploadImageByResize(file,0.3,scanSize);
+            return FileUpLoadTool.uploadImageByResize(file,0.5,scanSize);
         }else if(size>3 && size<=6){
+            return FileUpLoadTool.uploadImageByResize(file,0.4,scanSize);
+        }else if(size>6 && size<=10){
+            return FileUpLoadTool.uploadImageByResize(file,0.3,scanSize);
+        }else if(size>10){
             return FileUpLoadTool.uploadImageByResize(file,0.2,scanSize);
-        }else if(size>6){
-            return FileUpLoadTool.uploadImageByResize(file,0.1,scanSize);
         }else{
             return uploadImageByResize(file,DEFAULT_QUALITY,scanSize);
         }
