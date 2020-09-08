@@ -298,24 +298,6 @@ public class FileUpLoadTool {
         }
     }
 
-    public static String getApplicationUploadFilesDirectory(String uploadFileDirectory){
-        String currentDirectory = null;
-        try {
-            //得到当前目录
-            currentDirectory = new File(".").getCanonicalPath();
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new ServiceException(I18NRESOURCE.getValue("file_upload_failed"));
-        }
-        String directory = currentDirectory +"/"+uploadFileDirectory+"/";
-
-        File dirFile = new File(directory);
-        if (!dirFile.exists()) {
-            dirFile.mkdirs();
-        }
-        return directory;
-    }
-
 
     /**
      * 删除
@@ -335,7 +317,7 @@ public class FileUpLoadTool {
 
 
     public static String getDefalutUploadFilesDirectory(){
-        return getApplicationUploadFilesDirectory(DEFALUT_UPLOAD_FILE_DIRECTORY);
+        return ApplicationDirectoryTool.getApplicationUploadFilesDirectory(DEFALUT_UPLOAD_FILE_DIRECTORY);
     }
 
     public static double getFileSize(Long len, String unit) {

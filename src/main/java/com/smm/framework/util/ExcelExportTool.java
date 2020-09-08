@@ -35,7 +35,7 @@ public class ExcelExportTool {
         writer.write(datas, true);
         response.setContentType("application/vnd.ms-excel;charset=utf-8");
         String name = createExcelName();
-        response.setHeader("Content-Disposition","attachment;filename="+name+".xls");
+        response.setHeader("Content-Disposition","attachment;filename="+name);
         ServletOutputStream out= null;
         try {
             out = response.getOutputStream();
@@ -48,10 +48,33 @@ public class ExcelExportTool {
         IoUtil.close(out);
     }
 
+    /**
+     * 简单格式导出
+     * @param headerAlias 用LinkedHashMap表头才会按顺序显示
+     * @param datas
+     */
+    public static String simpleExport(String excelDirectory,LinkedHashMap<String,String> headerAlias, List datas){
+        String filePath = getExcelDirectoryPath(excelDirectory)+createExcelName();
+        ExcelWriter writer = ExcelUtil.getWriter(filePath);
+
+        writer.setHeaderAlias(headerAlias);
+        writer.setOnlyAlias(true);
+        writer.write(datas, true);
+        writer.close();
+
+        return filePath;
+    }
+
     private static String createExcelName(){
         Date date = new Date();
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-        return format.format(date.getTime());
+        String fileName = format.format(date.getTime()) +".xls";
+        return fileName;
+    }
+
+
+    public static String getExcelDirectoryPath(String excelDirectory){
+        return ApplicationDirectoryTool.getApplicationUploadFilesDirectory(excelDirectory);
     }
 
 }
