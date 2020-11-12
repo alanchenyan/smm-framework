@@ -43,4 +43,11 @@ public class MoneyTool {
             return "0.00";
         }
     }
+
+    public static double fen2YuanDouble(Long fen){
+        if(fen!=null){
+            return BigDecimal.valueOf(Long.valueOf(fen)).divide(new BigDecimal(100)).doubleValue();
+        }
+        return 0.0;
+    }
 }

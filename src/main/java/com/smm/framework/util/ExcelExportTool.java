@@ -3,6 +3,8 @@ package com.smm.framework.util;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.poi.excel.ExcelUtil;
 import cn.hutool.poi.excel.ExcelWriter;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
@@ -63,6 +65,46 @@ public class ExcelExportTool {
         writer.write(datas, true);
         writer.close();
 
+        String fileAccessPath = excelDirectory+"/"+fileName;
+        return fileAccessPath;
+    }
+
+    /**
+     * 简单格式导出 & 按列汇总求和
+     * @param excelDirectory
+     * @param headerAlias
+     * @param datas
+     * @param sumColumnNums：需要求和的列，第一列为：1
+     * @return
+     */
+    public static String simpleExport(String excelDirectory,LinkedHashMap<String,String> headerAlias, List datas,List<Integer> sumColumnNums){
+        String fileName = createExcelName();
+        String filePath = getExcelDirectoryPath(excelDirectory)+fileName;
+        ExcelWriter writer = ExcelUtil.getWriter(filePath);
+
+        writer.setHeaderAlias(headerAlias);
+        writer.setOnlyAlias(true);
+        writer.write(datas, true);
+
+        writer.getSheet().setRowSumsBelow(true);
+        int rowCount = writer.getRowCount();
+
+        if(sumColumnNums!=null && sumColumnNums.size()>0){
+            int letterStartNum = 65;
+            Row row = writer.getSheet().createRow(rowCount);
+            for(Integer columnNum:sumColumnNums){
+                //下标是从0开始的，所以要减一
+                int column = columnNum-1;
+
+                int letterNum = letterStartNum+(column);
+                String columnName = (char)letterNum+"";
+
+                String sumstring = "SUM("+columnName+"2:"+columnName+rowCount+")";//求和公式
+                Cell cell = row.createCell(column);
+                cell.setCellFormula(sumstring);
+            }
+        }
+        writer.close();
         String fileAccessPath = excelDirectory+"/"+fileName;
         return fileAccessPath;
     }
