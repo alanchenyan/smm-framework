@@ -56,17 +56,7 @@ public class ExcelExportTool {
      * @param datas
      */
     public static String simpleExport(String excelDirectory,LinkedHashMap<String,String> headerAlias, List datas){
-        String fileName = createExcelName();
-        String filePath = getExcelDirectoryPath(excelDirectory)+fileName;
-        ExcelWriter writer = ExcelUtil.getWriter(filePath);
-
-        writer.setHeaderAlias(headerAlias);
-        writer.setOnlyAlias(true);
-        writer.write(datas, true);
-        writer.close();
-
-        String fileAccessPath = excelDirectory+"/"+fileName;
-        return fileAccessPath;
+        return simpleExport(excelDirectory,headerAlias,datas,null);
     }
 
     /**
@@ -74,7 +64,9 @@ public class ExcelExportTool {
      * @param excelDirectory
      * @param headerAlias
      * @param datas
-     * @param sumColumnNums：需要求和的列，第一列为：1
+     * @param sumColumnNums：
+     *        1、需要求和的列，第一列为：1
+     *        2、求和的列，只能是数字类型（int,double,float等），不能是String类型或其他类型
      * @return
      */
     public static String simpleExport(String excelDirectory,LinkedHashMap<String,String> headerAlias, List datas,List<Integer> sumColumnNums){
@@ -86,10 +78,22 @@ public class ExcelExportTool {
         writer.setOnlyAlias(true);
         writer.write(datas, true);
 
-        writer.getSheet().setRowSumsBelow(true);
-        int rowCount = writer.getRowCount();
+        //按列汇总求和
+        sumColumns(writer,sumColumnNums);
 
+        writer.close();
+        String fileAccessPath = excelDirectory+"/"+fileName;
+        return fileAccessPath;
+    }
+
+    /**
+     * 按列汇总求和
+     * @param writer
+     * @param sumColumnNums
+     */
+    private static void sumColumns(ExcelWriter writer,List<Integer> sumColumnNums){
         if(sumColumnNums!=null && sumColumnNums.size()>0){
+            int rowCount = writer.getRowCount();
             int letterStartNum = 65;
             Row row = writer.getSheet().createRow(rowCount);
             for(Integer columnNum:sumColumnNums){
@@ -104,9 +108,6 @@ public class ExcelExportTool {
                 cell.setCellFormula(sumstring);
             }
         }
-        writer.close();
-        String fileAccessPath = excelDirectory+"/"+fileName;
-        return fileAccessPath;
     }
 
     private static String createExcelName(){
