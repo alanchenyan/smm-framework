@@ -78,8 +78,10 @@ public class ExcelExportTool {
         writer.setOnlyAlias(true);
         writer.write(datas, true);
 
-        //按列汇总求和
-        sumColumns(writer,sumColumnNums);
+        if(datas!=null && datas.size()>0){
+            //按列汇总求和
+            sumColumns(writer,sumColumnNums);
+        }
 
         writer.close();
         String fileAccessPath = excelDirectory+"/"+fileName;
