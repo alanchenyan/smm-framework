@@ -134,6 +134,8 @@ public class DateTool {
         cal.set(Calendar.HOUR_OF_DAY, 23);
         cal.set(Calendar.MINUTE, 59);
         cal.set(Calendar.SECOND, 59);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        cal.set(Calendar.MILLISECOND,0);
         return cal.getTime();
     }
 
@@ -299,6 +301,8 @@ public class DateTool {
         calendar.set(getNowYear(), getNowMonth() - 1, 1);
         int day = calendar.getActualMaximum(5);
         calendar.set(getNowYear(), getNowMonth() - 1, day);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        calendar.set(Calendar.MILLISECOND,0);
         return getDayEndTime(calendar.getTime());
     }
 
@@ -321,6 +325,8 @@ public class DateTool {
         calendar.set(getNowYear(), getNowMonth() - 2, 1);
         int day = calendar.getActualMaximum(5);
         calendar.set(getNowYear(), getNowMonth() - 2, day);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        calendar.set(Calendar.MILLISECOND,0);
         return getDayEndTime(calendar.getTime());
     }
 
@@ -345,6 +351,8 @@ public class DateTool {
         cal.set(Calendar.YEAR, getNowYear());
         cal.set(Calendar.MONTH, Calendar.DECEMBER);
         cal.set(Calendar.DATE, 31);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        cal.set(Calendar.MILLISECOND,0);
         return getDayEndTime(cal.getTime());
     }
 
@@ -377,7 +385,8 @@ public class DateTool {
         }
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH), 23, 59, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        calendar.set(Calendar.MILLISECOND,0);
         return new Date(calendar.getTimeInMillis());
     }
 
