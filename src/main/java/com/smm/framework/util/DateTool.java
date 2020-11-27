@@ -168,6 +168,8 @@ public class DateTool {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getTodayEndTime());
         cal.add(Calendar.DAY_OF_MONTH, -amount);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        cal.set(Calendar.MILLISECOND,0);
         return cal.getTime();
     }
 
@@ -191,6 +193,8 @@ public class DateTool {
         Calendar cal = new GregorianCalendar();
         cal.setTime(getTodayEndTime());
         cal.add(Calendar.DAY_OF_MONTH, amount);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        cal.set(Calendar.MILLISECOND,0);
         return cal.getTime();
     }
 
@@ -250,6 +254,8 @@ public class DateTool {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getThisWeekStartTime());
         cal.add(Calendar.DAY_OF_WEEK, 6);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        cal.set(Calendar.MILLISECOND,0);
         Date weekEndSta = cal.getTime();
         return getDayEndTime(weekEndSta);
     }
@@ -278,6 +284,8 @@ public class DateTool {
         Calendar cal = Calendar.getInstance();
         cal.setTime(getLastWeekStartTime());
         cal.add(Calendar.DAY_OF_WEEK, 6);
+        //解决mysql保存23:59:59时，自动加一秒的问题
+        cal.set(Calendar.MILLISECOND,0);
         Date weekEndSta = cal.getTime();
         return getDayEndTime(weekEndSta);
     }
