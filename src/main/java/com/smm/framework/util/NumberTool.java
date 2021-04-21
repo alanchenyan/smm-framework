@@ -84,6 +84,20 @@ public class NumberTool {
     }
 
     /**
+     * 提供精确的乘法运算(小数进行四舍五入)
+     * @param v1
+     * @param v2
+     * @param scale 表示表示需要精确到小数点以后几位。
+     * @return
+     */
+    public static double mul(double v1,double v2,int scale){
+        BigDecimal b1 = new BigDecimal(Double.toString(v1));
+        BigDecimal b2 = new BigDecimal(Double.toString(v2));
+
+        return round(b1.multiply(b2).doubleValue(),scale);
+    }
+
+    /**
      * 提供（相对）精确的除法运算，当发生除不尽的情况时，精确到
      * 小数点以后10位，以后的数字四舍五入。
      * @param v1 被除数
